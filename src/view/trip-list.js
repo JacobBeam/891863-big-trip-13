@@ -1,4 +1,1 @@
-export const createTripListTemplate = () => {
-  return ` <ul class="trip-events__list">
-  </ul>`;
-};
+export const createTripListTemplate = () => ` <ul class="trip-events__list">  </ul>`;
