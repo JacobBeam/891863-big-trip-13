@@ -4,7 +4,7 @@ export const createTripItemTemplate = (trip) => {
 
   const {eventType, destination, offers, startDate, endDate, eventPrice, isFavorite} = trip;
 
-   const eventDate = dayjs(startDate).format(`MMM DD`);
+  const eventDate = dayjs(startDate).format(`MMM DD`);
   const eventStartTime = dayjs(startDate).format(`hh mm`);
   const eventEndTime = dayjs(endDate).format(`hh mm`);
 
