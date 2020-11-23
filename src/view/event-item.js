@@ -4,7 +4,7 @@ export const createTripItemTemplate = (trip) => {
 
   const {eventType, destination, offers, startDate, endDate, eventPrice, isFavorite} = trip;
 
-  const eventDate = dayjs(startDate).format(`MMM DD`);
+   const eventDate = dayjs(startDate).format(`MMM DD`);
   const eventStartTime = dayjs(startDate).format(`hh mm`);
   const eventEndTime = dayjs(endDate).format(`hh mm`);
 
@@ -91,7 +91,7 @@ export const createTripItemTemplate = (trip) => {
   <div class="event">
     <time class="event__date" datetime="2019-03-18">${eventDate}</time>
     <div class="event__type">
-      <img class="event__type-icon" width="42" height="42" src="img/icons/${eventType}.png" alt="Event type icon">
+      <img class="event__type-icon" width="42" height="42" src="./img/icons/${eventType.toLowerCase()}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${eventType} ${destination}</h3>
     <div class="event__schedule">
