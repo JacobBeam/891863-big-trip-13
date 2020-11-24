@@ -2,7 +2,14 @@ import dayjs from "dayjs";
 
 export const createEditTripTemplate = (trip) => {
 
-  const {eventType, destination, offers, startDate, endDate, destinationInfo, destinationPhoto, eventPrice} = trip;
+  const {eventType,
+    destination,
+    offers,
+    startDate,
+    endDate,
+    destinationInfo,
+    destinationPhoto,
+    eventPrice} = trip;
 
   const startDateValue = dayjs(startDate).format(`DD/MM/YY HH:MM`);
   const endDateValue = dayjs(endDate).format(`DD/MM/YY HH:MM`);
@@ -62,8 +69,7 @@ ${photo.map((value) => `<img class="event__photo" src=${value} alt="Event photo"
 
     if (infoTemplate || photoTemplate) {
 
-      return `
-      <section class="event__section  event__section--destination">
+      return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
   ${infoTemplate ? infoTemplate : ``}
   ${photoTemplate ? photoTemplate : ``}

@@ -1,75 +1,21 @@
 import dayjs from "dayjs";
+import {findEventDuration} from "./utils.js";
+
 
 export const createTripItemTemplate = (trip) => {
 
-  const {eventType, destination, offers, startDate, endDate, eventPrice, isFavorite} = trip;
+  const {eventType,
+    destination,
+    offers,
+    startDate,
+    endDate,
+    eventPrice,
+    isFavorite} = trip;
 
   const eventDate = dayjs(startDate).format(`MMM DD`);
   const eventStartTime = dayjs(startDate).format(`hh mm`);
   const eventEndTime = dayjs(endDate).format(`hh mm`);
-
-
-  const findEventDuration = () => {
-
-    const duration = dayjs(endDate).diff(dayjs(startDate), `minute`);
-
-    let stringDuration = ``;
-
-    if (duration < 60) {
-      if (duration < 10) {
-        stringDuration = `0${duration}M`;
-      } else if (duration === 0) {
-        stringDuration = `00M`;
-      } else {
-        stringDuration = `${duration}M`;
-      }
-    } else if (duration < 60 * 24) {
-      let hours = Math.floor(duration / 60);
-
-      if (hours < 10) {
-        stringDuration = `0${hours}H`;
-      } else {
-        stringDuration = `${hours}H`;
-      }
-
-      let minutes = duration - hours * 60;
-      if (minutes < 10) {
-        stringDuration += ` 0${minutes}M`;
-      } else if (minutes === 0) {
-        stringDuration += ` 00M`;
-      } else {
-        stringDuration += ` ${minutes}M`;
-      }
-    } else {
-      let days = Math.floor(duration / 60 / 24);
-      if (days < 10) {
-        stringDuration = `0${days}D`;
-      } else {
-        stringDuration = `${days}D`;
-      }
-
-      let hours = Math.floor((duration - days * 24 * 60) / 60);
-      if (hours < 10) {
-        stringDuration += ` 0${hours}H`;
-      } else {
-        stringDuration += ` ${hours}H`;
-      }
-
-      let minutes = duration - days * 24 * 60 - hours * 60;
-      if (minutes < 10) {
-        stringDuration += ` 0${minutes}M`;
-      } else if (minutes === 0) {
-        stringDuration += ` 00M`;
-      } else {
-        stringDuration += ` ${minutes}M`;
-      }
-
-    }
-
-    return stringDuration;
-  };
-
-  const eventDuration = findEventDuration();
+  const eventDuration = findEventDuration(startDate, endDate);
 
   const createTripOffersTemplate = (offersArray) => {
 

@@ -7,12 +7,11 @@ import {createTripListTemplate} from "./view/trip-list.js";
 // import {createNewTripTemplate} from "./view/event-new.js";
 import {createEditTripTemplate} from "./view/event-edit.js";
 import {createTripItemTemplate} from "./view/event-item.js";
-import {generateEventTrip} from "./view/trip.js";
+import {generateEventTrip} from "./view/mock.js";
+
 
 const TRIP_COUNT = 15;
-
 const sortTripsByDay = (a, b)=> a.startDate - b.startDate;
-
 const trips = new Array(TRIP_COUNT).fill().map(generateEventTrip).sort(sortTripsByDay);
 
 const render = (container, template, place) => {
