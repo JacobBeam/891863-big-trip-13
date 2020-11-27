@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import {findEventDuration} from "./utils.js";
+import {findEventDuration, createElement} from "./utils.js";
 
 
-export const createTripItemTemplate = (trip) => {
+const createTripItemTemplate = (trip) => {
 
   const {eventType,
     destination,
@@ -67,3 +67,27 @@ ${tripOffersTemplate}
   </div>
 </li>`;
 };
+
+export default class EventItem {
+
+  constructor(trip) {
+    this._trip = trip;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripItemTemplate(this._trip);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

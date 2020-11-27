@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
+import {createElement} from "./utils.js";
 
-export const createEditTripTemplate = (trip) => {
+const createEditTripTemplate = (trip) => {
 
   const {eventType,
     destination,
@@ -82,7 +83,8 @@ ${photo.map((value) => `<img class="event__photo" src=${value} alt="Event photo"
   const destinationTemplate = createDestinationTemplate(destinationInfoTemplate, destinationPhotoTemplate);
 
 
-  return `<form class="event event--edit" action="#" method="post">
+  return `<li class="trip-events__item">
+  <form class="event event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -188,5 +190,28 @@ ${photo.map((value) => `<img class="event__photo" src=${value} alt="Event photo"
 ${destinationTemplate}
 </section>
 
-</form>`;
+</form></li>`;
 };
+export default class EventEdit {
+
+  constructor(trip) {
+    this._trip = trip;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditTripTemplate(this._trip);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
