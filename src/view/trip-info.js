@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
+import {createElement} from "./utils.js";
 
-export const createTripInfoTemplate = (trips) => {
+const createTripInfoTemplate = (trips) => {
   let tripInfo = ``;
   if (trips.length <= 3) {
     tripInfo = trips.map((trip) => trip.destination).join(` &mdash; `);
@@ -20,3 +21,26 @@ export const createTripInfoTemplate = (trips) => {
 
 </section>`;
 };
+export default class TripInfo {
+
+  constructor(trips) {
+    this._trips = trips;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripInfoTemplate(this._trips);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

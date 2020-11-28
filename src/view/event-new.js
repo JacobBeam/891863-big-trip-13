@@ -1,15 +1,25 @@
 import dayjs from "dayjs";
+import {createElement} from "./utils.js";
 
+const BLANK_EVENT = {
+  eventType: `Taxi`,
+  destination: ``,
+  offers: ``,
+  startDate: dayjs(),
+  endDate: dayjs(),
+  destinationInfo: [],
+  destinationPhoto: [],
+  eventPrice: ``};
 
-export const createNewTripTemplate = (trip = {}) => {
-  const {eventType = `Taxi`,
-    destination = ``,
-    offers = ``,
-    startDate = dayjs(),
-    endDate = dayjs(),
-    destinationInfo = [],
-    destinationPhoto = [],
-    eventPrice = ``} = trip;
+const createNewTripTemplate = (trip = BLANK_EVENT) => {
+  const {eventType,
+    destination,
+    offers,
+    startDate,
+    endDate,
+    destinationInfo,
+    destinationPhoto,
+    eventPrice} = trip;
 
 
   const startDateValue = dayjs(startDate).format(`DD/MM/YY HH:MM`);
@@ -189,3 +199,26 @@ ${photo.map((value) => `<img class="event__photo" src=${value} alt="Event photo"
 
 </form>`;
 };
+
+export default class NewEvent {
+
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createNewTripTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
