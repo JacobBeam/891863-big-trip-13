@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {createElement} from "./utils.js";
+import AbstractView from "./abstract.js";
 
 const BLANK_EVENT = {
   eventType: `Taxi`,
@@ -200,25 +200,9 @@ ${photo.map((value) => `<img class="event__photo" src=${value} alt="Event photo"
 </form>`;
 };
 
-export default class NewEvent {
-
-  constructor() {
-    this._element = null;
-  }
+export default class NewEvent extends AbstractView {
 
   getTemplate() {
     return createNewTripTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
