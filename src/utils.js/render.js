@@ -42,14 +42,14 @@ export const renderTemplate = (container, template, place) => {
 };
 
 
-export const replace = (newChild, oldChild) => {
-  if (oldChild instanceof Abstract) {
-    oldChild = oldChild.getElement();
-  }
+const checkInstanceOfAbstract = (element) => {
+  return (element instanceof Abstract) ? (element = element.getElement()) : element;
+};
 
-  if (newChild instanceof Abstract) {
-    newChild = newChild.getElement();
-  }
+
+export const replace = (newChild, oldChild) => {
+  newChild = checkInstanceOfAbstract(newChild);
+  oldChild = checkInstanceOfAbstract(oldChild);
 
   const parent = oldChild.parentElement;
 
