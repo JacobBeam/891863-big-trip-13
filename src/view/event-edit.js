@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {createElement} from "./utils.js";
+import AbstractView from "./abstract.js";
 
 const createEditTripTemplate = (trip) => {
 
@@ -192,26 +192,36 @@ ${destinationTemplate}
 
 </form></li>`;
 };
-export default class EventEdit {
+export default class EventEdit extends AbstractView {
 
   constructor(trip) {
+    super();
     this._trip = trip;
-    this._element = null;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._editCloseClickHandler = this._editCloseClickHandler.bind(this);
   }
 
   getTemplate() {
     return createEditTripTemplate(this._trip);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  _editCloseClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editCloseClick();
+  }
+
+  setEditCloseClickHandler(callback) {
+    this._callback.editCloseClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editCloseClickHandler);
   }
 }
