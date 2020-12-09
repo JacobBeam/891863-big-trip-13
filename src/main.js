@@ -16,15 +16,6 @@ const trips = new Array(TRIP_COUNT).fill().map(generateEventTrip).sort(sortTrips
 const tripMainElement = document.querySelector(`.trip-main`);
 const mainContentElement = document.querySelector(`.trip-events`);
 
-if (TRIP_COUNT > 0) {
-  render(tripMainElement, new TripInfoView(trips), RenderPosition.AFTERBEGIN);
-  const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
-  render(tripInfoElement, new TotalPriceView(trips), RenderPosition.BEFOREEND);
-} else {
-  render(mainContentElement, new EmptyEventListView(), RenderPosition.BEFOREEND);
-}
-
-
 const menuElement = tripMainElement.querySelector(`.trip-controls`);
 render(menuElement, new MenuView(), RenderPosition.BEFOREEND);
 render(menuElement, new FilterView(), RenderPosition.BEFOREEND);
@@ -32,5 +23,11 @@ render(menuElement, new FilterView(), RenderPosition.BEFOREEND);
 const boardPresenter = new BoardPresenter(mainContentElement)
 
 if (TRIP_COUNT > 0) {
+  render(tripMainElement, new TripInfoView(trips), RenderPosition.AFTERBEGIN);
+  const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
+  render(tripInfoElement, new TotalPriceView(trips), RenderPosition.BEFOREEND);
+
   boardPresenter.init(trips);
+} else {
+  render(mainContentElement, new EmptyEventListView(), RenderPosition.BEFOREEND);
 }

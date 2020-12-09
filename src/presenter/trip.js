@@ -1,24 +1,33 @@
 import SortView from "../view/trip-sort.js";
 import EventsListView from "../view/trip-list.js";
+
 import EventEditView from "../view/event-edit.js";
 import EventItemView from "../view/event-item.js";
 import EventPresenter from "./event.js";
 import {render, RenderPosition, replace} from "../utils/render.js";
-
+import {updateItem} from "../utils/utils.js";
 
 export default class Board {
 
   constructor(boardContainer) {
     this._boardContainer = boardContainer;
+    this._eventPresenter = {}
 
     this._sortComponent = new SortView();
     this._eventsListComponent = new EventsListView();
+
+    this._handlerEventChange = this._handlerEventChange.bind(this);
   }
 
   init(boardTrips) {
     this._boardTrips = boardTrips.slice();
 
     this._renderBoard();
+  }
+
+  _handlerEventChange(updateEvent){
+    this._boardTrips = updateItem(this._boardTrips, updateEvent);
+    this._eventPresenter[updateEvent.id].init(updateEvent)
   }
 
   _renderSort() {
@@ -29,49 +38,30 @@ export default class Board {
     render(this._boardContainer, this._eventsListComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderTrip(trip) {
-    //const eventComponent = new EventItemView(trip);
-    //const eventEditComponent = new EventEditView(trip);
+  _renderInfo() {
+    render(this._boardContainer, this._sortComponent, RenderPosition.BEFOREEND);
+  }
 
-    //const replaceCardToForm = () => {
-    //  replace(eventEditComponent, eventComponent);
-    //};
+  _renderEventsList() {
+    render(this._boardContainer, this._eventsListComponent, RenderPosition.BEFOREEND);
+  }
 
-    //const replaceFormToCard = () => {
-    //  replace(eventComponent, eventEditComponent);
-    //};
-
-    //const onEscKeyDown = (evt) => {
-    //  if (evt.key === `Escape` || evt.key === `Esc`) {
-    //    evt.preventDefault();
-    //    replaceFormToCard();
-    //    document.removeEventListener(`keydown`, onEscKeyDown);
-    //  }
-    //};
-
-    //eventComponent.setEditClickHandler(() => {
-    //  replaceCardToForm();
-    //  document.addEventListener(`keydown`, onEscKeyDown);
-    //});
-
-    //eventEditComponent.setFormSubmitHandler(() => {
-    //  replaceFormToCard();
-    //  document.removeEventListener(`keydown`, onEscKeyDown);
-    //});
-
-    //eventEditComponent.setEditCloseClickHandler(() => {
-    //  replaceFormToCard();
-    //  document.removeEventListener(`keydown`, onEscKeyDown);
-    //});
-
-    //render(this._eventsListComponent, eventComponent, RenderPosition.BEFOREEND);
-    const eventPresenter = new EventPresenter(this._eventsListComponent)
+  _renderEvent(trip) {
+    const eventPresenter = new EventPresenter(this._eventsListComponent,this._handlerEventChange)
     eventPresenter.init(trip)
+    this._eventPresenter[trip.id] = eventPresenter;
+  }
+
+  _clearEventList() {
+    Object
+      .values(this._eventPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._eventPresenter = {};
   }
 
   _renderTrips() {
     this._boardTrips
-      .forEach((boardTrip) => this._renderTrip(boardTrip));
+      .forEach((boardTrip) => this._renderEvent(boardTrip));
   }
 
   _renderBoard() {
