@@ -20,7 +20,7 @@ const menuElement = tripMainElement.querySelector(`.trip-controls`);
 render(menuElement, new MenuView(), RenderPosition.BEFOREEND);
 render(menuElement, new FilterView(), RenderPosition.BEFOREEND);
 
-const boardPresenter = new BoardPresenter(mainContentElement)
+const boardPresenter = new BoardPresenter(mainContentElement);
 
 if (TRIP_COUNT > 0) {
   render(tripMainElement, new TripInfoView(trips), RenderPosition.AFTERBEGIN);

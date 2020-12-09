@@ -1,22 +1,20 @@
 import SortView from "../view/trip-sort.js";
 import EventsListView from "../view/trip-list.js";
-
-import EventEditView from "../view/event-edit.js";
-import EventItemView from "../view/event-item.js";
 import EventPresenter from "./event.js";
-import {render, RenderPosition, replace} from "../utils/render.js";
+import {render, RenderPosition} from "../utils/render.js";
 import {updateItem} from "../utils/utils.js";
 
 export default class Board {
 
   constructor(boardContainer) {
     this._boardContainer = boardContainer;
-    this._eventPresenter = {}
+    this._eventPresenter = {};
 
     this._sortComponent = new SortView();
     this._eventsListComponent = new EventsListView();
 
     this._handlerEventChange = this._handlerEventChange.bind(this);
+    this._handlerModeChange = this._handlerModeChange.bind(this);
   }
 
   init(boardTrips) {
@@ -25,9 +23,15 @@ export default class Board {
     this._renderBoard();
   }
 
-  _handlerEventChange(updateEvent){
+  _handlerEventChange(updateEvent) {
     this._boardTrips = updateItem(this._boardTrips, updateEvent);
-    this._eventPresenter[updateEvent.id].init(updateEvent)
+    this._eventPresenter[updateEvent.id].init(updateEvent);
+  }
+
+  _handlerModeChange() {
+    Object
+    .values(this._eventPresenter)
+    .forEach((presenter) => presenter.resetView());
   }
 
   _renderSort() {
@@ -47,8 +51,8 @@ export default class Board {
   }
 
   _renderEvent(trip) {
-    const eventPresenter = new EventPresenter(this._eventsListComponent,this._handlerEventChange)
-    eventPresenter.init(trip)
+    const eventPresenter = new EventPresenter(this._eventsListComponent, this._handlerEventChange, this._handlerModeChange);
+    eventPresenter.init(trip);
     this._eventPresenter[trip.id] = eventPresenter;
   }
 
