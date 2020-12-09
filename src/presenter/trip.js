@@ -1,13 +1,17 @@
 import SortView from "../view/trip-sort.js";
 import EventsListView from "../view/trip-list.js";
 import EventPresenter from "./event.js";
+import TripInfoPresenter from "./trip-info.js";
+//  import TripInfoView from "../view/trip-info.js";
+//  import TripTotalPriceView from "../view/trip-price.js";
 import {render, RenderPosition} from "../utils/render.js";
 import {updateItem} from "../utils/utils.js";
 
 export default class Board {
 
-  constructor(boardContainer) {
+  constructor(boardContainer, tripInfoElement) {
     this._boardContainer = boardContainer;
+    this._tripInfoElement = tripInfoElement;
     this._eventPresenter = {};
 
     this._sortComponent = new SortView();
@@ -32,6 +36,15 @@ export default class Board {
     Object
     .values(this._eventPresenter)
     .forEach((presenter) => presenter.resetView());
+  }
+
+  _renderTripInfo() {
+    const tripInfo = new TripInfoPresenter(this._tripInfoElement);
+    tripInfo.init(this._boardTrips);
+    //  this._tripInfoComponent = new TripInfoView(this._boardTrips);
+    //  this._tripTotalPriceComponent = new TripTotalPriceView(this._boardTrips);
+    //  render(this._tripInfoElement, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
+    //  render(this._tripInfoComponent, this._tripTotalPriceComponent, RenderPosition.BEFOREEND);
   }
 
   _renderSort() {
@@ -69,6 +82,7 @@ export default class Board {
   }
 
   _renderBoard() {
+    this._renderTripInfo();
     this._renderSort();
     this._renderEventsList();
     this._renderTrips();
