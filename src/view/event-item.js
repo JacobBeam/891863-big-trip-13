@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {findEventDuration} from "../utils.js/utils.js";
+import {findEventDuration} from "../utils/utils.js";
 import AbstractView from "./abstract.js";
 
 
