@@ -9,9 +9,8 @@ import {render, RenderPosition} from "./utils/render.js";
 import BoardPresenter from "./presenter/trip.js";
 
 const TRIP_COUNT = 15;
-const sortTripsByDay = (a, b) => a.startDate - b.startDate;
 
-const trips = new Array(TRIP_COUNT).fill().map(generateEventTrip).sort(sortTripsByDay);
+const trips = new Array(TRIP_COUNT).fill().map(generateEventTrip);
 
 const tripInfoElement = document.querySelector(`.trip-main`);
 const eventsContentElement = document.querySelector(`.trip-events`);

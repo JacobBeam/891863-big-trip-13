@@ -1,5 +1,12 @@
 import dayjs from "dayjs";
 
+export const SortType = {
+  DATE_DEFAULT: `date`,
+  DURATION: `duration`,
+  PRICE: `price`
+};
+
+
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -88,4 +95,16 @@ export const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1)
   ];
+};
+
+export const sortDate = (a, b) => {
+  return b.startDate - a.startDate;
+};
+
+export const sortPrice = (a, b) => {
+  return b.eventPrice - a.eventPrice;
+};
+
+export const sortDuration = (a, b) => {
+  return dayjs(b.endDate).diff(dayjs(b.startDate)) - dayjs(a.endDate).diff(dayjs(a.startDate));
 };
