@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
-import {getRandomInteger, shuffle} from "../utils.js/utils.js";
+import {getRandomInteger, shuffle} from "../utils/utils.js";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateEventType = () => {
   const types = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
@@ -186,6 +187,7 @@ export const generateEventTrip = () => {
   const eventsOffers = ganarateOffers();
 
   return {
+    id: generateId(),
     eventType,
     destination: generateDestination(),
     offers: eventsOffers[eventType.toLowerCase()],

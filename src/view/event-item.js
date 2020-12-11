@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {findEventDuration} from "../utils.js/utils.js";
+import {findEventDuration} from "../utils/utils.js";
 import AbstractView from "./abstract.js";
 
 
@@ -74,7 +74,9 @@ export default class EventItem extends AbstractView {
   constructor(trip) {
     super();
     this._trip = trip;
+
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -89,5 +91,15 @@ export default class EventItem extends AbstractView {
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
   }
 }
