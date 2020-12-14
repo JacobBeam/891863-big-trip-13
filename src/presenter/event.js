@@ -83,6 +83,7 @@ export default class Event {
   _handlerEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      this._eventEditComponent.reset(this._trip);
       this._replaceFormToCard();
     }
   }
@@ -91,7 +92,8 @@ export default class Event {
     this._replaceCardToForm();
   }
 
-  _handlerFormSubmit() {
+  _handlerFormSubmit(trip) {
+    this._changeData(trip);
     this._replaceFormToCard();
   }
 
