@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 
+
 export const SortType = {
   DATE_DEFAULT: `date`,
   DURATION: `duration`,
@@ -98,7 +99,7 @@ export const updateItem = (items, update) => {
 };
 
 export const sortDate = (a, b) => {
-  return b.startDate - a.startDate;
+  return a.startDate - b.startDate;
 };
 
 export const sortPrice = (a, b) => {

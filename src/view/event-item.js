@@ -18,9 +18,10 @@ const createTripItemTemplate = (trip) => {
   const eventEndTime = dayjs(endDate).format(`HH mm`);
   const eventDuration = findEventDuration(startDate, endDate);
 
-  const createTripOffersTemplate = (offersArray) => {
+  const createTripOffersTemplate = (data) => {
 
-    return offersArray.filter((offer) => offer.isAdded).map(({type, price}) =>
+    return Object.values(data).filter((offer) => offer.isAdded).map(({type, price}) =>
+    //  offersArray.filter((offer) => offer.isAdded).map(({type, price}) =>
       `<li class="event__offer">
   <span class="event__offer-title">${type}</span>
   &plus;&euro;&nbsp;
