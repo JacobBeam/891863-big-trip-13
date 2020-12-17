@@ -2,6 +2,9 @@ import dayjs from "dayjs";
 import SmartView from "./smart.js";
 import {destinationInfoMap, offersMap, TYPES} from "./mock.js";
 
+import flatpickr from "flatpickr";
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEditTripTemplate = (data) => {
 
@@ -18,8 +21,10 @@ const createEditTripTemplate = (data) => {
     isDestinationPhoto,
   } = data;
 
-  const startDateValue = dayjs(startDate).format(`DD/MM/YY HH:MM`);
-  const endDateValue = dayjs(endDate).format(`DD/MM/YY HH:MM`);
+  const startDateValue = dayjs(startDate).format(`DD/MM/YY HH:mm`);
+  const endDateValue = dayjs(endDate).format(`DD/MM/YY HH:mm`);
+
+  const isSubmitDisabled = (startDate > endDate);
 
   const createOffersTemplate = (offersData, isData) => {
 
@@ -134,7 +139,7 @@ ${typesEventListtemplate}
       <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${eventPrice}">
     </div>
 
-    <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+    <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
     <button class="event__reset-btn" type="reset">Delete</button>
     <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
@@ -153,6 +158,8 @@ export default class EventEdit extends SmartView {
   constructor(trip) {
     super();
     this._data = EventEdit.parseEventToData(trip);
+    this._datepickerStart = null;
+    this._datepickerEnd = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editCloseClickHandler = this._editCloseClickHandler.bind(this);
@@ -160,8 +167,12 @@ export default class EventEdit extends SmartView {
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
     this._eventPriceInputHandler = this._eventPriceInputHandler.bind(this);
     this._offersChangeHandler = this._offersChangeHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
   }
 
   reset(task) {
@@ -174,8 +185,68 @@ export default class EventEdit extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setEditCloseClickHandler(this._callback.editCloseClick);
+  }
+
+  _setStartDatepicker() {
+    if (this._datepickerStart) {
+      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
+      // которые создает flatpickr при инициализации
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+
+    this._datepickerStart = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `d/m/Y H:i`,
+          defaultDate: this._data.startDate,
+          onChange: this._startDateChangeHandler
+        }
+    );
+  }
+
+  _startDateChangeHandler(userDate) {
+    if (dayjs(userDate).toDate() > dayjs(this._datepickerEnd.selectedDates).toDate()) {
+      this.updateData({
+        startDate: dayjs(userDate).toDate(),
+        endDate: dayjs(userDate).toDate()
+      });
+    } else {
+      this.updateData({
+        startDate: dayjs(userDate).toDate()
+      });
+    }
+  }
+
+  _setEndDatepicker() {
+    if (this._datepickerEnd) {
+      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
+      // которые создает flatpickr при инициализации
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
+    }
+
+    this._datepickerEnd = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          minDate: dayjs(this._data.startDate).valueOf(),
+          dateFormat: `d/m/Y H:i`,
+          defaultDate: this._data.endDate,
+          onChange: this._endDateChangeHandler
+        }
+    );
+  }
+
+  _endDateChangeHandler(userDate) {
+    this.updateData({
+      endDate: dayjs(userDate).toDate()
+    });
   }
 
   _setInnerHandlers() {
