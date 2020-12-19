@@ -6,14 +6,16 @@ import TripInfoPresenter from "./trip-info.js";
 //  import TripInfoView from "../view/trip-info.js";
 //  import TripTotalPriceView from "../view/trip-price.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {sortDate, sortPrice, sortDuration, SortType, UpdateType, UserAction} from "../utils/utils.js";
+import {filter,sortDate, sortPrice, sortDuration, SortType, UpdateType, UserAction} from "../utils/utils.js";
 
 export default class Board {
 
-  constructor(boardContainer, tripInfoElement, pointsModel) {
+  constructor(boardContainer, tripInfoElement, pointsModel, filterModel) {
     this._boardContainer = boardContainer;
     this._tripInfoElement = tripInfoElement;
     this._pointsModel = pointsModel;
+    this._filterModel=filterModel;
+
     this._eventPresenter = {};
     this._tripInfoPresenter = null;
 
@@ -31,6 +33,7 @@ export default class Board {
     this._handlerSortTypeChange = this._handlerSortTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handlerModelEvent);
+    this._filterModel.addObserver(this._handlerModelEvent);
   }
 
   init() {
@@ -38,14 +41,18 @@ export default class Board {
   }
 
   _getPoints() {
+    const filterType = this._filterModel.getFilter();
+    const points = this._pointsModel.getPoints();
+    const filteredPoints=filter[filterType](points)
+
     switch (this._currentSortType) {
       case SortType.DURATION:
-        return this._pointsModel.getPoints().slice().sort(sortDuration);
+        return filteredPoints.sort(sortDuration);
       case SortType.PRICE:
-        return this._pointsModel.getPoints().slice().sort(sortPrice);
+        return filteredPoints.sort(sortPrice);
     }
 
-    return this._pointsModel.getPoints().slice().sort(sortDate);
+    return filteredPoints.sort(sortDate);
   }
 
 
@@ -78,8 +85,8 @@ export default class Board {
     }
   }
 
-  _handlerModelEvent(updateType, data) {
-    console.log(updateType, data);
+  _handlerModelEvent(updateType) {
+
     // В зависимости от типа изменений решаем, что делать:
 
     switch (updateType) {
