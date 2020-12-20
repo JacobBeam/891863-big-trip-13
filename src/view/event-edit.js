@@ -186,8 +186,8 @@ export default class EventEdit extends SmartView {
     }
   }
 
-  reset(task) {
-    this.updateData(EventEdit.parseDataToEvent(task));
+  reset(trip) {
+    this.updateData(EventEdit.parseDataToEvent(trip));
   }
 
   getTemplate() {
@@ -310,7 +310,6 @@ export default class EventEdit extends SmartView {
 
 
     this.updateData({
-
       eventType: evt.target.value,
       offers: offersMap[evt.target.value],
       isOffers: Object.keys(offersMap[evt.target.value]).length !== 0

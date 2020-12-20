@@ -3,11 +3,13 @@ import EventsListView from "../view/trip-list.js";
 import EmptyEventListView from "../view/event-empty.js";
 import EventPresenter from "./event.js";
 import TripInfoPresenter from "./trip-info.js";
+import EventNewPresenter from "./event-new.js";
+
+
 //  import TripInfoView from "../view/trip-info.js";
 //  import TripTotalPriceView from "../view/trip-price.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {filter,sortDate, sortPrice, sortDuration, SortType, UpdateType, UserAction} from "../utils/utils.js";
-
+import {filter,sortDate, sortPrice, sortDuration, SortType, UpdateType, UserAction, FilterType} from "../utils/utils.js";
 export default class Board {
 
   constructor(boardContainer, tripInfoElement, pointsModel, filterModel) {
@@ -25,7 +27,8 @@ export default class Board {
 
     this._noPointsComponent = new EmptyEventListView();
     this._eventsListComponent = new EventsListView();
-    this._eventsListComponent = new EventsListView();
+
+    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent,this._handlerViewAction)
 
     this._handlerViewAction = this._handlerViewAction.bind(this);
     this._handlerModelEvent = this._handlerModelEvent.bind(this);
@@ -34,6 +37,9 @@ export default class Board {
 
     this._pointsModel.addObserver(this._handlerModelEvent);
     this._filterModel.addObserver(this._handlerModelEvent);
+
+    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent,this._handlerViewAction)
+
   }
 
   init() {
@@ -55,6 +61,11 @@ export default class Board {
     return filteredPoints.sort(sortDate);
   }
 
+  createPoint(){
+    this._currentSortType = SortType.DATE_DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._eventNewPresenter.init();
+  }
 
   _handlerSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
@@ -108,6 +119,7 @@ export default class Board {
   }
 
   _handlerModeChange() {
+    this._eventNewPresenter.destroy();
     Object
     .values(this._eventPresenter)
     .forEach((presenter) => presenter.resetView());
@@ -175,7 +187,7 @@ _renderNoPoints() {
   }
 
   _clearBoard({resetSortType = false} = {}) {
-
+    this._eventNewPresenter.destroy();
     Object
       .values(this._eventPresenter)
       .forEach((presenter) => presenter.destroy());

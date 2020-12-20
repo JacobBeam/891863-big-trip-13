@@ -43,3 +43,7 @@ const boardPresenter = new BoardPresenter(eventsContentElement, tripInfoElement,
 //} else {
 //  render(eventsContentElement, new EmptyEventListView(), RenderPosition.BEFOREEND);
 //}
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  boardPresenter.createPoint();
+});
