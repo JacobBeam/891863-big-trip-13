@@ -8,12 +8,12 @@ import flatpickr from "flatpickr";
 
 const BLANK_EVENT = {
   eventType: TYPES[0],
-  destination: destinations[0],
-  offers: offersMap[TYPES[0].toLocaleLowerCase()],
+  destination: "",
+  offers: {},
   startDate: (new Date()),
   endDate: (new Date()),
-  destinationInfo: destinationInfoMap[destinations[0]].info,
-  destinationPhoto: destinationInfoMap[destinations[0]].photo,
+  destinationInfo: '',
+  destinationPhoto: [],
   eventPrice: ``};
 
 const createNewTripTemplate = (trip = BLANK_EVENT) => {
@@ -124,9 +124,9 @@ ${typesEventListtemplate}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
       <datalist id="destination-list-1">
-        <option value="Amsterdam"></option>
-        <option value="Geneva"></option>
-        <option value="Chamonix"></option>
+       ${destinations.map((city)=>`<option value="${city}"></option>`).join(``)}
+
+
       </datalist>
     </div>
 
@@ -143,7 +143,7 @@ ${typesEventListtemplate}
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${eventPrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${eventPrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -303,10 +303,11 @@ this._setEndDatepicker();
 
   _eventPriceInputHandler(evt) {
     evt.preventDefault();
+  // if(!/\D/.test(evt.target.value)){}
     this.updateData({
       eventPrice: evt.target.value
-    }, true);
-  }
+    });
+    }
 
   _eventTypeChangeHandler(evt) {
     //  Сброс всех дополнений до false при переключении типа
@@ -323,14 +324,22 @@ this._setEndDatepicker();
   }
 
   _eventDestinationChangeHandler(evt) {
+if(Object.keys(destinationInfoMap).includes(evt.target.value)){
     this.updateData({
       destination: evt.target.value,
-      destinationInfo: destinationInfoMap[evt.target.value].info,
+      destinationInfo: (destinationInfoMap[evt.target.value].info),
       destinationPhoto: destinationInfoMap[evt.target.value].photo,
       isDestinationInfo: (destinationInfoMap[evt.target.value].info.length !== 0),
       isDestinationPhoto: (destinationInfoMap[evt.target.value].info.length !== 0)
     });
+  } else {
+    this.updateData({
+      destination: evt.target.value,
+      isDestinationInfo: false,
+      isDestinationPhoto: false
+    });
 
+    this.getElement().querySelector(`.event__save-btn`).setAttribute("disabled", "true")}
   }
 
   _formSubmitHandler(evt) {
