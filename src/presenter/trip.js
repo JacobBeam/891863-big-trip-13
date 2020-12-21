@@ -9,14 +9,14 @@ import EventNewPresenter from "./event-new.js";
 //  import TripInfoView from "../view/trip-info.js";
 //  import TripTotalPriceView from "../view/trip-price.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {filter,sortDate, sortPrice, sortDuration, SortType, UpdateType, UserAction, FilterType} from "../utils/utils.js";
+import {filter, sortDate, sortPrice, sortDuration, SortType, UpdateType, UserAction, FilterType} from "../utils/utils.js";
 export default class Board {
 
   constructor(boardContainer, tripInfoElement, pointsModel, filterModel) {
     this._boardContainer = boardContainer;
     this._tripInfoElement = tripInfoElement;
     this._pointsModel = pointsModel;
-    this._filterModel=filterModel;
+    this._filterModel = filterModel;
 
     this._eventPresenter = {};
     this._tripInfoPresenter = null;
@@ -28,7 +28,7 @@ export default class Board {
     this._noPointsComponent = new EmptyEventListView();
     this._eventsListComponent = new EventsListView();
 
-    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent,this._handlerViewAction)
+    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this._handlerViewAction);
 
     this._handlerViewAction = this._handlerViewAction.bind(this);
     this._handlerModelEvent = this._handlerModelEvent.bind(this);
@@ -38,18 +38,18 @@ export default class Board {
     this._pointsModel.addObserver(this._handlerModelEvent);
     this._filterModel.addObserver(this._handlerModelEvent);
 
-    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent,this._handlerViewAction)
+    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this._handlerViewAction);
 
   }
 
   init() {
-     this._renderBoard();
+    this._renderBoard();
   }
 
   _getPoints() {
     const filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
-    const filteredPoints=filter[filterType](points)
+    const filteredPoints = filter[filterType](points);
 
     switch (this._currentSortType) {
       case SortType.DURATION:
@@ -61,7 +61,7 @@ export default class Board {
     return filteredPoints.sort(sortDate);
   }
 
-  createPoint(){
+  createPoint() {
     this._currentSortType = SortType.DATE_DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._eventNewPresenter.init();
@@ -78,7 +78,6 @@ export default class Board {
   }
 
   _handlerViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
     // Здесь будем вызывать обновление модели.
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
@@ -101,8 +100,8 @@ export default class Board {
     // В зависимости от типа изменений решаем, что делать:
 
     switch (updateType) {
-      //case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялась цена)
+      // case UpdateType.PATCH:
+      //  - обновить часть списка (например, когда поменялась цена)
       //  this._pointsModel[data.id].init(data);
       //  break;
       case UpdateType.MINOR:
@@ -125,8 +124,8 @@ export default class Board {
     .forEach((presenter) => presenter.resetView());
   }
 
-// Меняем tripInfo.init(this._boardTrips) убираем аргумент
-// Передавать данные только с сортировкой по дате
+  //  Меняем tripInfo.init(this._boardTrips) убираем аргумент
+  //  Передавать данные только с сортировкой по дате
   _renderTripInfo() {
     const tripInfoPresenter = new TripInfoPresenter(this._tripInfoElement, this._pointsModel);
     tripInfoPresenter.init();
@@ -138,7 +137,7 @@ export default class Board {
       this._sortComponent = null;
     }
 
-    this._sortComponent= new SortView(this._currentSortType)
+    this._sortComponent = new SortView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handlerSortTypeChange);
 
     render(this._boardContainer, this._sortComponent, RenderPosition.BEFOREEND);
@@ -148,9 +147,9 @@ export default class Board {
     render(this._boardContainer, this._eventsListComponent, RenderPosition.BEFOREEND);
   }
 
-  //_renderInfo() {
+  //  _renderInfo() {
   //  render(this._boardContainer, this._sortComponent, RenderPosition.BEFOREEND);
-  //}
+  //  }
 
 
   _renderEvent(trip) {
@@ -164,20 +163,20 @@ export default class Board {
     points.forEach((point) => this._renderEvent(point));
   }
 
-_renderNoPoints() {
-  render(this._boardContainer, this._noPointsComponent, RenderPosition.BEFOREEND)
-}
+  _renderNoPoints() {
+    render(this._boardContainer, this._noPointsComponent, RenderPosition.BEFOREEND);
+  }
 
   _renderBoard() {
     const points = this._getPoints();
 
     if (points.length === 0) {
       this._renderNoPoints();
-      return
+      return;
     }
 
-    //Можно вынести отдельно _renderTripInfo в init и проверять
-    //на обновление при сабмите (если менялся тип маршрута
+    //  Можно вынести отдельно _renderTripInfo в init и проверять
+    //  на обновление при сабмите (если менялся тип маршрута
     //   или доп опции, то перерисовывать только Info, а не весь Board,
     //    добавить к Minor, major еще и pacth)
     this._renderTripInfo();

@@ -111,8 +111,8 @@ export default class Event {
 
   _handlerFavoriteClick() {
     this._changeData(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._trip,

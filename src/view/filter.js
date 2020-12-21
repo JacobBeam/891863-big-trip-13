@@ -1,5 +1,5 @@
 import AbstractView from "./abstract.js";
-import {FilterType} from "../utils/utils.js"
+import {FilterType} from "../utils/utils.js";
 
 const createFilterTemplate = (currentFilterType) => `<form class="trip-filters" action="#" method="get">
   <h2 class="visually-hidden">Filter events</h2>
@@ -23,7 +23,7 @@ const createFilterTemplate = (currentFilterType) => `<form class="trip-filters" 
 
 export default class Filter extends AbstractView {
 
-  constructor (currentFilterType){
+  constructor(currentFilterType) {
     super();
     this._currentFilter = currentFilterType;
 
@@ -34,7 +34,7 @@ export default class Filter extends AbstractView {
     return createFilterTemplate(this._currentFilter);
   }
 
-  _filterTypeChangeHandler(evt){
+  _filterTypeChangeHandler(evt) {
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.value);
   }

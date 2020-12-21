@@ -1,18 +1,18 @@
 import dayjs from "dayjs";
-//import AbstractView from "./abstract.js";
+//  import AbstractView from "./abstract.js";
 import SmartView from "./smart.js";
 import {destinationInfoMap, offersMap, TYPES, destinations} from "./mock.js";
 
 import flatpickr from "flatpickr";
- Object.entries(offersMap[TYPES[0].toLocaleLowerCase()]).forEach(([, value]) => (value.isAdded = false));
+Object.entries(offersMap[TYPES[0].toLocaleLowerCase()]).forEach(([, value]) => (value.isAdded = false));
 
 const BLANK_EVENT = {
   eventType: TYPES[0],
-  destination: "",
+  destination: ``,
   offers: {},
   startDate: (new Date()),
   endDate: (new Date()),
-  destinationInfo: '',
+  destinationInfo: ``,
   destinationPhoto: [],
   eventPrice: ``};
 
@@ -27,7 +27,7 @@ const createNewTripTemplate = (trip = BLANK_EVENT) => {
     eventPrice,
     isOffers,
     isDestinationInfo,
-    isDestinationPhoto,} = trip;
+    isDestinationPhoto} = trip;
 
 
   const startDateValue = dayjs(startDate).format(`DD/MM/YY HH:MM`);
@@ -162,26 +162,26 @@ ${destinationTemplate}
 
 export default class NewEvent extends SmartView {
 
-constructor(){
-super();
-this._data = NewEvent.parseEventToData(BLANK_EVENT);
-this._datepickerStart = null;
-this._datepickerEnd = null;
+  constructor() {
+    super();
+    this._data = NewEvent.parseEventToData(BLANK_EVENT);
+    this._datepickerStart = null;
+    this._datepickerEnd = null;
 
-this._formSubmitHandler = this._formSubmitHandler.bind(this);
-this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
 
-this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
-this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
-this._eventPriceInputHandler = this._eventPriceInputHandler.bind(this);
-this._offersChangeHandler = this._offersChangeHandler.bind(this);
-this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
-this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+    this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
+    this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
+    this._eventPriceInputHandler = this._eventPriceInputHandler.bind(this);
+    this._offersChangeHandler = this._offersChangeHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
-this._setInnerHandlers();
-this._setStartDatepicker();
-this._setEndDatepicker();
-}
+    this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
+  }
 
   getTemplate() {
     return createNewTripTemplate(this._data);
@@ -207,7 +207,7 @@ this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
-   _setStartDatepicker() {
+  _setStartDatepicker() {
     if (this._datepickerStart) {
       // В случае обновления компонента удаляем вспомогательные DOM-элементы,
       // которые создает flatpickr при инициализации
@@ -303,11 +303,11 @@ this._setEndDatepicker();
 
   _eventPriceInputHandler(evt) {
     evt.preventDefault();
-  // if(!/\D/.test(evt.target.value)){}
+    // if(!/\D/.test(evt.target.value)){}
     this.updateData({
       eventPrice: evt.target.value
     });
-    }
+  }
 
   _eventTypeChangeHandler(evt) {
     //  Сброс всех дополнений до false при переключении типа
@@ -324,22 +324,23 @@ this._setEndDatepicker();
   }
 
   _eventDestinationChangeHandler(evt) {
-if(Object.keys(destinationInfoMap).includes(evt.target.value)){
-    this.updateData({
-      destination: evt.target.value,
-      destinationInfo: (destinationInfoMap[evt.target.value].info),
-      destinationPhoto: destinationInfoMap[evt.target.value].photo,
-      isDestinationInfo: (destinationInfoMap[evt.target.value].info.length !== 0),
-      isDestinationPhoto: (destinationInfoMap[evt.target.value].info.length !== 0)
-    });
-  } else {
-    this.updateData({
-      destination: evt.target.value,
-      isDestinationInfo: false,
-      isDestinationPhoto: false
-    });
+    if (Object.keys(destinationInfoMap).includes(evt.target.value)) {
+      this.updateData({
+        destination: evt.target.value,
+        destinationInfo: (destinationInfoMap[evt.target.value].info),
+        destinationPhoto: destinationInfoMap[evt.target.value].photo,
+        isDestinationInfo: (destinationInfoMap[evt.target.value].info.length !== 0),
+        isDestinationPhoto: (destinationInfoMap[evt.target.value].info.length !== 0)
+      });
+    } else {
+      this.updateData({
+        destination: evt.target.value,
+        isDestinationInfo: false,
+        isDestinationPhoto: false
+      });
 
-    this.getElement().querySelector(`.event__save-btn`).setAttribute("disabled", "true")}
+      this.getElement().querySelector(`.event__save-btn`).setAttribute(`disabled`, `true`);
+    }
   }
 
   _formSubmitHandler(evt) {

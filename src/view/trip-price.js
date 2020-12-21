@@ -2,7 +2,7 @@ import AbstractView from "./abstract.js";
 
 const createTripPriceTemplate = (trips) => {
 
-  const eventsPrice = trips.reduce((accumulator, currentValue) => accumulator +(+currentValue.eventPrice), 0);
+  const eventsPrice = trips.reduce((accumulator, currentValue) => accumulator + (+currentValue.eventPrice), 0);
   //  let offerPrice = 0;
   //  trips.filter((value) => value.offers.length > 0)
   //  .map((value) => value.offers)

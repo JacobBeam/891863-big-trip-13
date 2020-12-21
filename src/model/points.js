@@ -19,7 +19,7 @@ export default class Points extends Observer {
 
     if (index === -1) {
       throw new Error(`Can't update unexisting task`);
-    };
+    }
 
     this._points = [
       ...this._points.slice(0, index),
@@ -28,7 +28,7 @@ export default class Points extends Observer {
     ];
 
     this._notify(updateType, update);
-  };
+  }
 
   addPoint(updateType, update) {
     this._points = [
@@ -37,7 +37,7 @@ export default class Points extends Observer {
     ];
 
     this._notify(updateType, update);
-  };
+  }
 
   deletePoint(updateType, update) {
     const index = this._points.findIndex((point) => point.id === update.id);

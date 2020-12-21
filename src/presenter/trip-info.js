@@ -12,7 +12,7 @@ export default class TripInfo {
   }
 
   init() {
-    const pointsInfo=this._getPoints()
+    const pointsInfo = this._getPoints();
 
     this._tripInfoComponent = new TripInfoView(pointsInfo);
     this._tripTotalPriceComponent = new TripTotalPriceView(pointsInfo);
@@ -21,7 +21,7 @@ export default class TripInfo {
     render(this._tripInfoComponent, this._tripTotalPriceComponent, RenderPosition.BEFOREEND);
   }
 
-  _getPoints(){
+  _getPoints() {
     return this._pointsModel.getPoints().slice().sort(sortDate);
   }
 

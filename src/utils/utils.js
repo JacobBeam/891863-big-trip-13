@@ -20,7 +20,7 @@ export const UpdateType = {
 };
 
 export const FilterType = {
-    EVERYTHING: `everything`,
+  EVERYTHING: `everything`,
   FUTURE: `future`,
   PAST: `past`
 };
@@ -115,7 +115,7 @@ export const sortDuration = (a, b) => {
 
 
 export const filter = {
-[FilterType.EVERYTHING]: (points) => points,
-[FilterType.FUTURE]: (points) => points.filter((point)=>point.startDate>=new Date()),
-[FilterType.PAST]: (points) => points.filter((point)=>point.endDate<new Date()),
-}
+  [FilterType.EVERYTHING]: (points) => points,
+  [FilterType.FUTURE]: (points) => points.filter((point)=>point.startDate >= new Date()),
+  [FilterType.PAST]: (points) => points.filter((point)=>point.endDate < new Date()),
+};

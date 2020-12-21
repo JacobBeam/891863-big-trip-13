@@ -317,23 +317,24 @@ export default class EventEdit extends SmartView {
   }
 
   _eventDestinationChangeHandler(evt) {
-    if(Object.keys(destinationInfoMap).includes(evt.target.value)){
+    if (Object.keys(destinationInfoMap).includes(evt.target.value)) {
 
-    this.updateData({
-      destination: evt.target.value,
-      destinationInfo: destinationInfoMap[evt.target.value].info,
-      destinationPhoto: destinationInfoMap[evt.target.value].photo,
-      isDestinationInfo: (destinationInfoMap[evt.target.value].info.length !== 0),
-      isDestinationPhoto: (destinationInfoMap[evt.target.value].info.length !== 0)
-    });
-  } else {
-    this.updateData({
-      destination: evt.target.value,
-      isDestinationInfo: false,
-      isDestinationPhoto: false
-    });
+      this.updateData({
+        destination: evt.target.value,
+        destinationInfo: destinationInfoMap[evt.target.value].info,
+        destinationPhoto: destinationInfoMap[evt.target.value].photo,
+        isDestinationInfo: (destinationInfoMap[evt.target.value].info.length !== 0),
+        isDestinationPhoto: (destinationInfoMap[evt.target.value].info.length !== 0)
+      });
+    } else {
+      this.updateData({
+        destination: evt.target.value,
+        isDestinationInfo: false,
+        isDestinationPhoto: false
+      });
 
-    this.getElement().querySelector(`.event__save-btn`).setAttribute("disabled", "true")}
+      this.getElement().querySelector(`.event__save-btn`).setAttribute(`disabled`, `true`);
+    }
   }
 
   _formSubmitHandler(evt) {
