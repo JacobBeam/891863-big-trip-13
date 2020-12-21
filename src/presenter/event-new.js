@@ -28,6 +28,7 @@ export default class EventNew {
 
     render(this._eventsListContainer, this._eventNewComponent, RenderPosition.AFTERBEGIN);
 
+
     document.addEventListener(`keydown`, this._escKeyDownHandler);
 
   }
