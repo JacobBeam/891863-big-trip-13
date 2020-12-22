@@ -4,7 +4,7 @@ import {getRandomInteger, shuffle} from "../utils/utils.js";
 export const TYPES = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
 
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateEventType = () => {
 
@@ -262,8 +262,11 @@ const ganaratePhoto = () => {
   return photos;
 };
 
+
+export const destinations = [`Amsterdam`, `Chamonix`, `Geneva`, `Paris`, `London`];
+
+
 const generateDestination = () => {
-  const destinations = [`Amsterdam`, `Chamonix`, `Geneva`, `Paris`, `London`];
 
   const randomIndex = getRandomInteger(0, destinations.length - 1);
 

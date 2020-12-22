@@ -1,6 +1,8 @@
 import EventEditView from "../view/event-edit.js";
 import EventItemView from "../view/event-item.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {UserAction, UpdateType} from "../utils/utils.js";
+
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -21,6 +23,7 @@ export default class Event {
     this._handlerEditCloseClick = this._handlerEditCloseClick.bind(this);
     this._handlerEscKeyDown = this._handlerEscKeyDown.bind(this);
     this._handlerFavoriteClick = this._handlerFavoriteClick.bind(this);
+    this._handlerDeleteClick = this._handlerDeleteClick.bind(this);
   }
 
   init(trip) {
@@ -37,7 +40,7 @@ export default class Event {
     this._eventEditComponent.setFormSubmitHandler(this._handlerFormSubmit);
     this._eventEditComponent.setEditCloseClickHandler(this._handlerEditCloseClick);
     this._eventComponent.setFavoriteClickHandler(this._handlerFavoriteClick);
-
+    this._eventEditComponent.setDeleteClickHandler(this._handlerDeleteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._eventsListComponent, this._eventComponent, RenderPosition.BEFOREEND);
@@ -93,7 +96,12 @@ export default class Event {
   }
 
   _handlerFormSubmit(trip) {
-    this._changeData(trip);
+    this._changeData(UserAction.UPDATE_POINT, UpdateType.MINOR, trip);
+    this._replaceFormToCard();
+  }
+
+  _handlerDeleteClick(trip) {
+    this._changeData(UserAction.DELETE_POINT, UpdateType.MINOR, trip);
     this._replaceFormToCard();
   }
 
@@ -103,6 +111,8 @@ export default class Event {
 
   _handlerFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._trip,

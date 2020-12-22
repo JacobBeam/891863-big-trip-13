@@ -7,6 +7,23 @@ export const SortType = {
   PRICE: `price`
 };
 
+export const UserAction = {
+  UPDATE_POINT: `UPDATE_POINT`,
+  ADD_POINT: `ADD_POINT`,
+  DELETE_POINT: `DELETE_POINT`
+};
+
+export const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -84,20 +101,6 @@ export const findEventDuration = (start, end) => {
   return stringDuration;
 };
 
-export const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1)
-  ];
-};
-
 export const sortDate = (a, b) => {
   return a.startDate - b.startDate;
 };
@@ -108,4 +111,11 @@ export const sortPrice = (a, b) => {
 
 export const sortDuration = (a, b) => {
   return dayjs(b.endDate).diff(dayjs(b.startDate)) - dayjs(a.endDate).diff(dayjs(a.startDate));
+};
+
+
+export const filter = {
+  [FilterType.EVERYTHING]: (points) => points,
+  [FilterType.FUTURE]: (points) => points.filter((point)=>point.startDate >= new Date()),
+  [FilterType.PAST]: (points) => points.filter((point)=>point.endDate < new Date()),
 };

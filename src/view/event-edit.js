@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import SmartView from "./smart.js";
-import {destinationInfoMap, offersMap, TYPES} from "./mock.js";
+import {destinationInfoMap, offersMap, TYPES, destinations} from "./mock.js";
 
 import flatpickr from "flatpickr";
 
@@ -117,9 +117,8 @@ ${typesEventListtemplate}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
       <datalist id="destination-list-1">
-        <option value="Amsterdam"></option>
-        <option value="Geneva"></option>
-        <option value="Chamonix"></option>
+      ${destinations.map((city)=>`<option value="${city}"></option>`).join(``)}
+
       </datalist>
     </div>
 
@@ -136,7 +135,7 @@ ${typesEventListtemplate}
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${eventPrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${eventPrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
@@ -169,14 +168,25 @@ export default class EventEdit extends SmartView {
     this._offersChangeHandler = this._offersChangeHandler.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+
 
     this._setInnerHandlers();
     this._setStartDatepicker();
     this._setEndDatepicker();
   }
 
-  reset(task) {
-    this.updateData(EventEdit.parseDataToEvent(task));
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+  }
+
+  reset(trip) {
+    this.updateData(EventEdit.parseDataToEvent(trip));
   }
 
   getTemplate() {
@@ -299,7 +309,6 @@ export default class EventEdit extends SmartView {
 
 
     this.updateData({
-
       eventType: evt.target.value,
       offers: offersMap[evt.target.value],
       isOffers: Object.keys(offersMap[evt.target.value]).length !== 0
@@ -308,14 +317,24 @@ export default class EventEdit extends SmartView {
   }
 
   _eventDestinationChangeHandler(evt) {
-    this.updateData({
-      destination: evt.target.value,
-      destinationInfo: destinationInfoMap[evt.target.value].info,
-      destinationPhoto: destinationInfoMap[evt.target.value].photo,
-      isDestinationInfo: (destinationInfoMap[evt.target.value].info.length !== 0),
-      isDestinationPhoto: (destinationInfoMap[evt.target.value].info.length !== 0)
-    });
+    if (Object.keys(destinationInfoMap).includes(evt.target.value)) {
 
+      this.updateData({
+        destination: evt.target.value,
+        destinationInfo: destinationInfoMap[evt.target.value].info,
+        destinationPhoto: destinationInfoMap[evt.target.value].photo,
+        isDestinationInfo: (destinationInfoMap[evt.target.value].info.length !== 0),
+        isDestinationPhoto: (destinationInfoMap[evt.target.value].info.length !== 0)
+      });
+    } else {
+      this.updateData({
+        destination: evt.target.value,
+        isDestinationInfo: false,
+        isDestinationPhoto: false
+      });
+
+      this.getElement().querySelector(`.event__save-btn`).setAttribute(`disabled`, `true`);
+    }
   }
 
   _formSubmitHandler(evt) {
@@ -337,6 +356,17 @@ export default class EventEdit extends SmartView {
     this._callback.editCloseClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editCloseClickHandler);
   }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EventEdit.parseDataToEvent(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
+  }
+
 
   static parseEventToData(trip) {
     return Object.assign(
