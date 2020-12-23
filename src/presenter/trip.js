@@ -35,8 +35,6 @@ export default class Board {
     this._handlerModeChange = this._handlerModeChange.bind(this);
     this._handlerSortTypeChange = this._handlerSortTypeChange.bind(this);
 
-    this._pointsModel.addObserver(this._handlerModelEvent);
-    this._filterModel.addObserver(this._handlerModelEvent);
 
     this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this._handlerViewAction);
 
@@ -44,6 +42,10 @@ export default class Board {
 
   init() {
     this._renderBoard();
+
+    this._pointsModel.addObserver(this._handlerModelEvent);
+    this._filterModel.addObserver(this._handlerModelEvent);
+
   }
 
   _getPoints() {
@@ -61,10 +63,10 @@ export default class Board {
     return filteredPoints.sort(sortDate);
   }
 
-  createPoint() {
+  createPoint(callback) {
     this._currentSortType = SortType.DATE_DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._eventNewPresenter.init();
+    this._eventNewPresenter.init(callback);
   }
 
   _handlerSortTypeChange(sortType) {
@@ -199,5 +201,16 @@ export default class Board {
     if (resetSortType) {
       this._currentSortType = SortType.DATE_DEFAULT;
     }
+  }
+
+  destroy(){
+    this._clearBoard({ resetSortType: true});
+    this._currentSortType = SortType.DATE_DEFAULT;
+
+    remove(this._eventsListComponent);
+
+    this._pointsModel.removeObserver(this._handlerModelEvent);
+    this._filterModel.removeObserver(this._handlerModelEvent);
+
   }
 }
