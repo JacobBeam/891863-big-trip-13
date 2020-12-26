@@ -1,228 +1,227 @@
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from "./smart.js";
-import {countTotalPriceByType, countTotalAmountByType, countTotalTimeByType} from "../utils/statistics.js"
-import {TYPES} from "../view/mock.js"
+import {countTotalPriceByType, countTotalAmountByType, countTotalTimeByType} from "../utils/statistics.js";
+import {TYPES} from "../view/mock.js";
 
 const BAR_HEIGHT = 85;
 
 
-const renderMoneyChart = (moneyCtx,points)=>{
+const renderMoneyChart = (moneyCtx, points) => {
 
-const totalPriceByType = TYPES.map((type)=>countTotalPriceByType(points, type))
+  const totalPriceByType = TYPES.map((type) => countTotalPriceByType(points, type));
 
   return new Chart(moneyCtx, {
-  plugins: [ChartDataLabels],
-  type: `horizontalBar`,
-  data: {
-    //  Поменять на уникальные типы транспорта
-    labels: TYPES,
-    datasets: [{
-    //  Поменять в том же порядке стоимость по каждому маршруту
-      data: totalPriceByType,
-      backgroundColor: `#ffffff`,
-      hoverBackgroundColor: `#ffffff`,
-      anchor: `start`
-    }]
-  },
-  options: {
-    plugins: {
-      datalabels: {
-        font: {
-          size: 13
-        },
-        color: `#000000`,
-        anchor: `end`,
-        align: `start`,
-        formatter: (val) => `€ ${val}`
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      //  Поменять на уникальные типы транспорта
+      labels: TYPES,
+      datasets: [{
+        //  Поменять в том же порядке стоимость по каждому маршруту
+        data: totalPriceByType,
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `€ ${val}`
+        }
+      },
+      title: {
+        display: true,
+        text: `MONEY`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 40,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
       }
-    },
-    title: {
-      display: true,
-      text: `MONEY`,
-      fontColor: `#000000`,
-      fontSize: 23,
-      position: `left`
-    },
-    scales: {
-      yAxes: [{
-        ticks: {
-          fontColor: `#000000`,
-          padding: 5,
-          fontSize: 13,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        barThickness: 40,
-      }],
-      xAxes: [{
-        ticks: {
-          display: false,
-          beginAtZero: true,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        minBarLength: 50
-      }],
-    },
-    legend: {
-      display: false
-    },
-    tooltips: {
-      enabled: false,
     }
-  }
-});
-}
+  });
+};
 
-const renderTimeSpendChart =  (timeSpendCtx,points)=>{
+const renderTimeSpendChart = (timeSpendCtx, points) => {
 
-  const totalTimeByType = TYPES.map((type)=>countTotalTimeByType(points, type))
+  const totalTimeByType = TYPES.map((type) => countTotalTimeByType(points, type));
 
   return new Chart(timeSpendCtx, {
-  plugins: [ChartDataLabels],
-  type: `horizontalBar`,
-  data: {
-    //  Поменять на уникальные типы транспорта
-    labels: TYPES,
-    datasets: [{
-    //  Поменять на общее время по типу
-      data: totalTimeByType,
-      backgroundColor: `#ffffff`,
-      hoverBackgroundColor: `#ffffff`,
-      anchor: `start`
-    }]
-  },
-  options: {
-    plugins: {
-      datalabels: {
-        font: {
-          size: 13
-        },
-        color: `#000000`,
-        anchor: `end`,
-        align: `start`,
-        formatter: (val) => `${val}D`
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      //  Поменять на уникальные типы транспорта
+      labels: TYPES,
+      datasets: [{
+        //  Поменять на общее время по типу
+        data: totalTimeByType,
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `${val}D`
+        }
+      },
+      title: {
+        display: true,
+        text: `TYME-SPEND`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 40,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
       }
-    },
-    title: {
-      display: true,
-      text: `TYME-SPEND`,
-      fontColor: `#000000`,
-      fontSize: 23,
-      position: `left`
-    },
-    scales: {
-      yAxes: [{
-        ticks: {
-          fontColor: `#000000`,
-          padding: 5,
-          fontSize: 13,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        barThickness: 40,
-      }],
-      xAxes: [{
-        ticks: {
-          display: false,
-          beginAtZero: true,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        minBarLength: 50
-      }],
-    },
-    legend: {
-      display: false
-    },
-    tooltips: {
-      enabled: false,
     }
-  }
-});
-}
+  });
+};
 
-const renderTypeChart = (typeCtx,points)=>{
+const renderTypeChart = (typeCtx, points) => {
 
-const totalAmountByType = TYPES.map((type)=>countTotalAmountByType(points, type))
+  const totalAmountByType = TYPES.map((type) => countTotalAmountByType(points, type));
 
-return new Chart(typeCtx, {
-  plugins: [ChartDataLabels],
-  type: `horizontalBar`,
-  data: {
-        //  Поменять на уникальные типы транспорта
-
-    labels: TYPES,
-    datasets: [{
-      //  Поменять на общее количество по типу
-      data: totalAmountByType,
-      backgroundColor: `#ffffff`,
-      hoverBackgroundColor: `#ffffff`,
-      anchor: `start`
-    }]
-  },
-  options: {
-    plugins: {
-      datalabels: {
-        font: {
-          size: 13
-        },
-        color: `#000000`,
-        anchor: `end`,
-        align: `start`,
-        formatter: (val) => `${val}x`
+  return new Chart(typeCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      //  Поменять на уникальные типы транспорта
+      labels: TYPES,
+      datasets: [{
+        //  Поменять на общее количество по типу
+        data: totalAmountByType,
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `${val}x`
+        }
+      },
+      title: {
+        display: true,
+        text: `TYPE`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 40,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
       }
-    },
-    title: {
-      display: true,
-      text: `TYPE`,
-      fontColor: `#000000`,
-      fontSize: 23,
-      position: `left`
-    },
-    scales: {
-      yAxes: [{
-        ticks: {
-          fontColor: `#000000`,
-          padding: 5,
-          fontSize: 13,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        barThickness: 40,
-      }],
-      xAxes: [{
-        ticks: {
-          display: false,
-          beginAtZero: true,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        minBarLength: 50
-      }],
-    },
-    legend: {
-      display: false
-    },
-    tooltips: {
-      enabled: false,
     }
-  }
-});
-}
+  });
+};
 const createStatisticsTemplate = () => {
 
   return `<section class="statistics">
@@ -255,7 +254,7 @@ export default class Statistics extends SmartView {
     this._timeSpendChart = null;
 
     this._setCharts();
-    }
+  }
 
   removeElement() {
     super.removeElement();
@@ -274,7 +273,7 @@ export default class Statistics extends SmartView {
   // Нужно ли?
   restoreHandlers() {
     this._setCharts();
-     }
+  }
 
   _setCharts() {
     // Нужно отрисовать графики
@@ -294,11 +293,9 @@ export default class Statistics extends SmartView {
     typeChartCtx.height = BAR_HEIGHT * 5;
     timeSpendChartCtx.height = BAR_HEIGHT * 5;
 
-    this._moneyChart = renderMoneyChart(moneyChartCtx, this._data)
-    this._typeChart = renderTypeChart(typeChartCtx, this._data)
-    this._timeSpendChart = renderTimeSpendChart(timeSpendChartCtx, this._data)
-
-
+    this._moneyChart = renderMoneyChart(moneyChartCtx, this._data);
+    this._typeChart = renderTypeChart(typeChartCtx, this._data);
+    this._timeSpendChart = renderTimeSpendChart(timeSpendChartCtx, this._data);
 
   }
 }

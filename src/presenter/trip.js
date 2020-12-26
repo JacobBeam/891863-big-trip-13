@@ -197,8 +197,8 @@ export default class Board {
     remove(this._sortComponent);
     remove(this._noPointsComponent);
 
-    if (!saveTripInfo){
-    this._tripInfoPresenter.destroy();
+    if (!saveTripInfo) {
+      this._tripInfoPresenter.destroy();
     }
 
     if (resetSortType) {
@@ -206,11 +206,11 @@ export default class Board {
     }
   }
 
-  destroy({saveTripInfo = false} = {}){
-    if (!saveTripInfo){
-      this._clearBoard({ resetSortType: true});
+  destroy({saveTripInfo = false} = {}) {
+    if (!saveTripInfo) {
+      this._clearBoard({resetSortType: true});
     } else {
-      this._clearBoard({ resetSortType: true, saveTripInfo:true});
+      this._clearBoard({resetSortType: true, saveTripInfo: true});
     }
 
     this._currentSortType = SortType.DATE_DEFAULT;

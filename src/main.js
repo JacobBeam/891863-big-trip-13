@@ -10,7 +10,7 @@ import {generateEventTrip} from "./view/mock.js";
 import {render, RenderPosition, remove} from "./utils/render.js";
 import BoardPresenter from "./presenter/trip.js";
 import FilterPresenter from "./presenter/filter.js";
-import {MenuItem, UpdateType, FilterType} from "./utils/utils.js"
+import {MenuItem} from "./utils/utils.js";
 
 const TRIP_COUNT = 25;
 
@@ -32,24 +32,12 @@ const menuElement = tripInfoElement.querySelector(`.trip-controls`);
 let siteMenuComponent = new MenuView();
 render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
 
-
-
 const filterPresenter = new FilterPresenter(menuElement, filterModel);
 const boardPresenter = new BoardPresenter(eventsContentElement, tripInfoElement, pointsModel, filterModel);
 
-//  const tripInfoComponent=new TripInfoView(trips);
-
-//  if (TRIP_COUNT > 0) {
-//  render(tripInfoElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
-//  render(tripInfoComponent, new TotalPriceView(trips), RenderPosition.BEFOREEND);
 filterPresenter.init();
 boardPresenter.init();
 
-
-
-//  } else {
-//  render(eventsContentElement, new EmptyEventListView(), RenderPosition.BEFOREEND);
-//  }
 let statisticsComponent = null;
 
 const handleSiteMenuClick = (menuItem) => {
@@ -58,24 +46,16 @@ const handleSiteMenuClick = (menuItem) => {
 
   switch (menuItem) {
     case MenuItem.TABLE:
-
-      boardPresenter.destroy()
+      boardPresenter.destroy();
       remove(statisticsComponent);
       boardPresenter.init();
-
-
       break;
+
     case MenuItem.STATISTICS:
-
       remove(statisticsComponent);
-      boardPresenter.destroy({saveTripInfo: true})
-      statisticsComponent = new StatisticsView(pointsModel.getPoints())
+      boardPresenter.destroy({saveTripInfo: true});
+      statisticsComponent = new StatisticsView(pointsModel.getPoints());
       render(eventsContentElement, statisticsComponent, RenderPosition.AFTER);
-
-      //Сбросить сортировку
-      //filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-
-
       break;
   }
 };
@@ -90,5 +70,5 @@ document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (e
   evt.preventDefault();
 
   boardPresenter.createPoint(handlerPointNewFormClose);
-evt.target.disabled=true
+  evt.target.disabled = true;
 });

@@ -307,7 +307,7 @@ export default class NewEvent extends SmartView {
     // if(!/\D/.test(evt.target.value)){}
     this.updateData({
       eventPrice: evt.target.value
-    },true);
+    }, true);
   }
 
   _eventTypeChangeHandler(evt) {
