@@ -187,7 +187,7 @@ export default class Board {
     this._renderTrips(points);
   }
 
-  _clearBoard({resetSortType = false} = {}) {
+  _clearBoard({resetSortType = false, saveTripInfo = false} = {}) {
     this._eventNewPresenter.destroy();
     Object
       .values(this._eventPresenter)
@@ -196,15 +196,23 @@ export default class Board {
 
     remove(this._sortComponent);
     remove(this._noPointsComponent);
+
+    if (!saveTripInfo){
     this._tripInfoPresenter.destroy();
+    }
 
     if (resetSortType) {
       this._currentSortType = SortType.DATE_DEFAULT;
     }
   }
 
-  destroy(){
-    this._clearBoard({ resetSortType: true});
+  destroy({saveTripInfo = false} = {}){
+    if (!saveTripInfo){
+      this._clearBoard({ resetSortType: true});
+    } else {
+      this._clearBoard({ resetSortType: true, saveTripInfo:true});
+    }
+
     this._currentSortType = SortType.DATE_DEFAULT;
 
     remove(this._eventsListComponent);
