@@ -2,9 +2,9 @@ import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from "./smart.js";
 import {countTotalPriceByType, countTotalAmountByType, countTotalTimeByType} from "../utils/statistics.js";
-import {TYPES} from "../view/mock.js";
+import {TYPES} from "./mock.js";
 
-const BAR_HEIGHT = 85;
+const BAR_HEIGHT = 55;
 
 
 const renderMoneyChart = (moneyCtx, points) => {
@@ -289,9 +289,9 @@ export default class Statistics extends SmartView {
     const timeSpendChartCtx = this.getElement().querySelector(`.statistics__chart--time`);
 
 
-    moneyChartCtx.height = BAR_HEIGHT * 5;
-    typeChartCtx.height = BAR_HEIGHT * 5;
-    timeSpendChartCtx.height = BAR_HEIGHT * 5;
+    moneyChartCtx.height = BAR_HEIGHT * TYPES.length;
+    typeChartCtx.height = BAR_HEIGHT * TYPES.length;
+    timeSpendChartCtx.height = BAR_HEIGHT * TYPES.length;
 
     this._moneyChart = renderMoneyChart(moneyChartCtx, this._data);
     this._typeChart = renderTypeChart(typeChartCtx, this._data);

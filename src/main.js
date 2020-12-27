@@ -4,7 +4,7 @@ import MenuView from "./view/menu.js";
 //  import NewEventView from "./view/event-new.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
-import StatisticsView from "./view/ststistics.js";
+import StatisticsView from "./view/statistics.js";
 //  import OptionsModel from "./model/options.js";
 import {generateEventTrip} from "./view/mock.js";
 import {render, RenderPosition, remove} from "./utils/render.js";
