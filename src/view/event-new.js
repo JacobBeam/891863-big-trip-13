@@ -205,6 +205,7 @@ export default class NewEvent extends SmartView {
     this._setStartDatepicker();
     this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _setStartDatepicker() {
@@ -306,7 +307,7 @@ export default class NewEvent extends SmartView {
     // if(!/\D/.test(evt.target.value)){}
     this.updateData({
       eventPrice: evt.target.value
-    });
+    }, true);
   }
 
   _eventTypeChangeHandler(evt) {
