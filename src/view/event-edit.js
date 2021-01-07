@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 import SmartView from "./smart.js";
-import {destinationInfoMap, offersMap, TYPES, destinations} from "./mock.js";
+import {destinationInfoMap, offersMap, TYPES, destinations, offersMapClear} from "./mock.js";
 
 import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-const createEditTripTemplate = (data) => {
+const createEditTripTemplate = (data, allDestinations) => {
 
   const {eventType,
     destination,
@@ -16,6 +16,7 @@ const createEditTripTemplate = (data) => {
     destinationInfo,
     destinationPhoto,
     eventPrice,
+    offersList,
     isOffers,
     isDestinationInfo,
     isDestinationPhoto,
@@ -26,26 +27,29 @@ const createEditTripTemplate = (data) => {
 
   const isSubmitDisabled = (startDate > endDate);
 
-  const createOffersTemplate = (offersData, isData) => {
+  const createOffersTemplate = (offersData, offersList, isData) => {
 
     return (isData) ? `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
 
-${Object.entries(offersData).map(([id, info]) => `
-<div class="event__offer-selector">
-  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" value="${id}" name="event-offer-${id}" ${info.isAdded ? `checked` : ``}>
-  <label class="event__offer-label" for="event-offer-${id}-1">
-    <span class="event__offer-title">${info.type}</span>
+${offersList.map(({title, price}, index) =>{
+  // Перебирать все значения возможных предложений, на каждом шаге искать в предложениях для точки соответствие текущего предложения по title и price, если соответствует, то ставить флаг в checked
+  let isChecked = offersData.find((offer)=> offer.title === title && offer.price === price )? true : false;
+
+  return `<div class="event__offer-selector">
+  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${index}" type="checkbox" value="${index}" name="event-offer-${index}" ${isChecked ? `checked` : ``}>
+  <label class="event__offer-label" for="event-offer-${index}">
+    <span class="event__offer-title">${title}</span>
     &plus;&euro;&nbsp;
-    <span class="event__offer-price">${info.price}</span>
+    <span class="event__offer-price">${price}</span>
   </label>
-</div>`).join(``)}
+</div>`}).join(``)}
 </div>
 </section>` : ` `;
   };
 
-  const offerstemplate = createOffersTemplate(offers, isOffers);
+  const offerstemplate = createOffersTemplate(offers, offersList, isOffers);
 
 
   const createDestinationInfoTemplate = (info, isInfo) => {
@@ -57,7 +61,7 @@ ${Object.entries(offersData).map(([id, info]) => `
     return isPhoto ? ` <div class="event__photos-container">
 <div class="event__photos-tape">
 
-${photo.map((value) => `<img class="event__photo" src= "${value}" alt="Event photo">`).join(``)}
+${photo.map((value) => `<img class="event__photo" src= "${value.src}" alt="${value.description}">`).join(``)}
 
 </div>
 </div>` : ` `;
@@ -117,7 +121,7 @@ ${typesEventListtemplate}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
       <datalist id="destination-list-1">
-      ${destinations.map((city)=>`<option value="${city}"></option>`).join(``)}
+      ${allDestinations.map((city)=>`<option value="${city.name}"></option>`).join(``)}
 
       </datalist>
     </div>
@@ -154,9 +158,11 @@ ${destinationTemplate}
 };
 export default class EventEdit extends SmartView {
 
-  constructor(trip) {
+  constructor(trip, destinations, offers) {
     super();
-    this._data = EventEdit.parseEventToData(trip);
+    this._destinations = destinations.slice();
+    this._offers = offers;
+    this._data = EventEdit.parseEventToData(trip, this._offers);
     this._datepickerStart = null;
     this._datepickerEnd = null;
 
@@ -190,7 +196,7 @@ export default class EventEdit extends SmartView {
   }
 
   getTemplate() {
-    return createEditTripTemplate(this._data);
+    return createEditTripTemplate(this._data, this._destinations);
   }
 
   restoreHandlers() {
@@ -280,19 +286,15 @@ export default class EventEdit extends SmartView {
   }
 
   _offersChangeHandler(evt) {
+    const offers = this._data.offers.slice()
+    const index = offers.findIndex((offer)=>offer.title === this._data.offersList[evt.target.value].title);
+ (index>-1)? offers.splice(index,1) : offers.push(this._data.offersList[evt.target.value]);
+
     this.updateData({
-      offers: Object.assign(
-          {},
-          this._data.offers,
-          {
-            [evt.target.value]: Object.assign(
-                {},
-                this._data.offers[evt.target.value],
-                {isAdded: evt.target.checked}
-            )
-          })
+      offers: offers
     }, true);
-  }
+
+   }
 
 
   _eventPriceInputHandler(evt) {
@@ -303,35 +305,38 @@ export default class EventEdit extends SmartView {
   }
 
   _eventTypeChangeHandler(evt) {
-    //  Сброс всех дополнений до false при переключении типа
-    //  Не придумал другого способа сменить, не совсем понятно влияет ли на что-то такой способ
-    Object.entries(offersMap[evt.target.value]).forEach(([, value]) => (value.isAdded = false));
 
+    const offersByType = this._offers.filter((offer) => offer.type === evt.target.value)
+    const [newOffer] = offersByType
 
     this.updateData({
       eventType: evt.target.value,
-      offers: offersMap[evt.target.value],
-      isOffers: Object.keys(offersMap[evt.target.value]).length !== 0
+      offers: [],
+      offersList: newOffer.offers,
+      isOffers: newOffer.offers.length !== 0
     });
-
   }
 
   _eventDestinationChangeHandler(evt) {
-    if (Object.keys(destinationInfoMap).includes(evt.target.value)) {
 
+
+    const [newDestination] = this._destinations.filter((destination) => destination.name === evt.target.value)
+    const destinationList = this._destinations.map((city) => city.name)
+
+    if (destinationList.includes(evt.target.value)) {
       this.updateData({
         destination: evt.target.value,
-        destinationInfo: destinationInfoMap[evt.target.value].info,
-        destinationPhoto: destinationInfoMap[evt.target.value].photo,
-        isDestinationInfo: (destinationInfoMap[evt.target.value].info.length !== 0),
-        isDestinationPhoto: (destinationInfoMap[evt.target.value].info.length !== 0)
+        destinationInfo: newDestination.description,
+        destinationPhoto: newDestination.pictures,
+        isDestinationInfo: newDestination.description.length !== 0,
+        isDestinationPhoto: newDestination.pictures.length !== 0
       });
     } else {
-      this.updateData({
-        destination: evt.target.value,
-        isDestinationInfo: false,
-        isDestinationPhoto: false
-      });
+      //this.updateData({
+      //  destination: evt.target.value,
+      //isDestinationInfo: false,
+      //isDestinationPhoto: false
+      //});
 
       this.getElement().querySelector(`.event__save-btn`).setAttribute(`disabled`, `true`);
     }
@@ -340,7 +345,7 @@ export default class EventEdit extends SmartView {
   _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
-  }
+     }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
@@ -368,24 +373,30 @@ export default class EventEdit extends SmartView {
   }
 
 
-  static parseEventToData(trip) {
-    return Object.assign(
+  static parseEventToData(trip, allOffers) {
+
+    const [offersByType] = allOffers.filter((offer)=> offer.type===trip.eventType);
+
+     return Object.assign(
         {},
         trip,
-        {
-          isOffers: Object.keys(trip.offers).length !== 0,
-          isDestinationInfo: trip.destinationInfo.length !== 0,
-          isDestinationPhoto: trip.destinationPhoto.length !== 0
-        }
+      {
+        offersList: offersByType.offers,
+        isOffers: offersByType.offers.length !== 0,
+        isDestinationInfo: trip.destinationInfo.length !== 0,
+        isDestinationPhoto: trip.destinationPhoto.length !== 0
+      }
     );
   }
 
   static parseDataToEvent(data) {
+
     let trip = Object.assign({}, data);
 
-    delete data.isOffers;
-    delete data.isDestinationInfo;
-    delete data.isDestinationPhoto;
+    delete trip.offersList;
+    delete trip.isOffers;
+    delete trip.isDestinationInfo;
+    delete trip.isDestinationPhoto;
 
     return trip;
   }

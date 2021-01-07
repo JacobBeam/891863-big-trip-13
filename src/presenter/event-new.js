@@ -18,14 +18,14 @@ export default class EventNew {
     this._handlerDeleteClick = this._handlerDeleteClick.bind(this);
   }
 
-  init(callback) {
+  init(callback, allDestinations, allOffers) {
     this._destroyCallback = callback;
 
     if (this._eventNewComponent !== null) {
       return;
     }
 
-    this._eventNewComponent = new EventNewView();
+    this._eventNewComponent = new EventNewView(allDestinations, allOffers);
     this._eventNewComponent.setDeleteClickHandler(this._handlerDeleteClick);
     this._eventNewComponent.setFormSubmitHandler(this._handlerFormSubmit);
 
