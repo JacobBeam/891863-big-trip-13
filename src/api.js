@@ -19,12 +19,11 @@ export default class Api {
   getPoints() {
     return this._load({url: `points`})
       .then(Api.toJSON)
-      .then((points)=>points.map(PointsModel.adaptToClient));
+      .then((points) => points.map(PointsModel.adaptToClient));
   }
 
 
   updatePoint(point) {
-    console.log(PointsModel.adaptToServer(point))
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
@@ -35,15 +34,15 @@ export default class Api {
       .then(PointsModel.adaptToClient);
   }
 
-getDestination() {
-  return this._load({url: `destinations`})
-  .then(Api.toJSON);
-}
+  getDestination() {
+    return this._load({url: `destinations`})
+      .then(Api.toJSON);
+  }
 
-getOffers() {
-  return this._load({url: `offers`})
-  .then(Api.toJSON);
-}
+  getOffers() {
+    return this._load({url: `offers`})
+      .then(Api.toJSON);
+  }
 
   _load({
     url,

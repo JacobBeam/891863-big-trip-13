@@ -2,7 +2,7 @@ import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from "./smart.js";
 import {countTotalPriceByType, countTotalAmountByType, countTotalTimeByType} from "../utils/statistics.js";
-import {TYPES} from "./mock.js";
+import {TYPES} from "../utils/const.js";
 
 const BAR_HEIGHT = 55;
 

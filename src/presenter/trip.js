@@ -5,10 +5,6 @@ import EmptyEventListView from "../view/event-empty.js";
 import EventPresenter from "./event.js";
 import TripInfoPresenter from "./trip-info.js";
 import EventNewPresenter from "./event-new.js";
-
-
-//  import TripInfoView from "../view/trip-info.js";
-//  import TripTotalPriceView from "../view/trip-price.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {filter, sortDate, sortPrice, sortDuration, SortType, UpdateType, UserAction, FilterType} from "../utils/utils.js";
 export default class Board {
@@ -53,15 +49,15 @@ export default class Board {
 
   }
 
-_getAllDestinations(){
-  const destination= this._pointsModel.getAllDestinations();
-  return destination;
-}
+  _getAllDestinations() {
+    const destination = this._pointsModel.getAllDestinations();
+    return destination;
+  }
 
-_getAllOffers(){
-  const offers= this._pointsModel.getAllOffers();
-  return offers;
-}
+  _getAllOffers() {
+    const offers = this._pointsModel.getAllOffers();
+    return offers;
+  }
 
   _getPoints() {
     const filterType = this._filterModel.getFilter();
@@ -103,9 +99,8 @@ _getAllOffers(){
     // update - обновленные данные
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-      //this._pointsModel.updatePoint(updateType, update);
         this._api.updatePoint(update).then((response)=>{
-           this._pointsModel.updatePoint(updateType, response);
+          this._pointsModel.updatePoint(updateType, response);
         });
         break;
       case UserAction.ADD_POINT:
@@ -122,10 +117,6 @@ _getAllOffers(){
     // В зависимости от типа изменений решаем, что делать:
 
     switch (updateType) {
-      // case UpdateType.PATCH:
-      //  - обновить часть списка (например, когда поменялась цена)
-      //  this._pointsModel[data.id].init(data);
-      //  break;
       case UpdateType.MINOR:
         // - обновить список (например, когда)
         this._clearBoard();
@@ -136,11 +127,11 @@ _getAllOffers(){
         this._clearBoard({resetSortType: true});
         this._renderBoard();
         break;
-        case UpdateType.INIT:
-          this._isLoading = false;
-          remove(this._loadingComponent);
-          this._renderBoard();
-          break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderBoard();
+        break;
     }
   }
 
@@ -151,8 +142,6 @@ _getAllOffers(){
     .forEach((presenter) => presenter.resetView());
   }
 
-  //  Меняем tripInfo.init(this._boardTrips) убираем аргумент
-  //  Передавать данные только с сортировкой по дате
   _renderTripInfo() {
     const tripInfoPresenter = new TripInfoPresenter(this._tripInfoElement, this._pointsModel);
     tripInfoPresenter.init();
@@ -174,20 +163,12 @@ _getAllOffers(){
     render(this._boardContainer, this._eventsListComponent, RenderPosition.BEFOREEND);
   }
 
-  //  _renderInfo() {
-  //  render(this._boardContainer, this._sortComponent, RenderPosition.BEFOREEND);
-  //  }
-
-
   _renderEvent(trip) {
-    const destinations = this._getAllDestinations()
-    const offers = this._getAllOffers()
+    const destinations = this._getAllDestinations();
+    const offers = this._getAllOffers();
     const eventPresenter = new EventPresenter(this._eventsListComponent, this._handlerViewAction, this._handlerModeChange);
 
-
-
-
-    eventPresenter.init(trip,destinations,offers);
+    eventPresenter.init(trip, destinations, offers);
     this._eventPresenter[trip.id] = eventPresenter;
   }
 
@@ -217,10 +198,6 @@ _getAllOffers(){
       return;
     }
 
-    //  Можно вынести отдельно _renderTripInfo в init и проверять
-    //  на обновление при сабмите (если менялся тип маршрута
-    //   или доп опции, то перерисовывать только Info, а не весь Board,
-    //    добавить к Minor, major еще и pacth)
     this._renderTripInfo();
     this._renderSort();
     this._renderEventsList();

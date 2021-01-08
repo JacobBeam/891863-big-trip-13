@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import SmartView from "./smart.js";
-import {destinationInfoMap, offersMap, TYPES, destinations, offersMapClear} from "./mock.js";
+import {TYPES} from "../utils/const.js";
 
 import flatpickr from "flatpickr";
 
@@ -27,24 +27,25 @@ const createEditTripTemplate = (data, allDestinations) => {
 
   const isSubmitDisabled = (startDate > endDate);
 
-  const createOffersTemplate = (offersData, offersList, isData) => {
+  const createOffersTemplate = (offersData, offersByType, isData) => {
 
     return (isData) ? `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
 
-${offersList.map(({title, price}, index) =>{
+${offersByType.map(({title, price}, index) => {
   // Перебирать все значения возможных предложений, на каждом шаге искать в предложениях для точки соответствие текущего предложения по title и price, если соответствует, то ставить флаг в checked
-  let isChecked = offersData.find((offer)=> offer.title === title && offer.price === price )? true : false;
+    let isChecked = offersData.find((offer) => offer.title === title && offer.price === price) ? true : false;
 
-  return `<div class="event__offer-selector">
+    return `<div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${index}" type="checkbox" value="${index}" name="event-offer-${index}" ${isChecked ? `checked` : ``}>
   <label class="event__offer-label" for="event-offer-${index}">
     <span class="event__offer-title">${title}</span>
     &plus;&euro;&nbsp;
     <span class="event__offer-price">${price}</span>
   </label>
-</div>`}).join(``)}
+</div>`;
+  }).join(``)}
 </div>
 </section>` : ` `;
   };
@@ -286,15 +287,19 @@ export default class EventEdit extends SmartView {
   }
 
   _offersChangeHandler(evt) {
-    const offers = this._data.offers.slice()
-    const index = offers.findIndex((offer)=>offer.title === this._data.offersList[evt.target.value].title);
- (index>-1)? offers.splice(index,1) : offers.push(this._data.offersList[evt.target.value]);
+    const newOffers = this._data.offers.slice();
+    const index = newOffers.findIndex((offer)=>offer.title === this._data.offersList[evt.target.value].title);
+
+    if (index > -1) {
+      newOffers.splice(index, 1);
+    } else {
+      newOffers.push(this._data.offersList[evt.target.value]);
+    }
 
     this.updateData({
-      offers: offers
+      offers: newOffers
     }, true);
-
-   }
+  }
 
 
   _eventPriceInputHandler(evt) {
@@ -306,8 +311,8 @@ export default class EventEdit extends SmartView {
 
   _eventTypeChangeHandler(evt) {
 
-    const offersByType = this._offers.filter((offer) => offer.type === evt.target.value)
-    const [newOffer] = offersByType
+    const offersByType = this._offers.filter((offer) => offer.type === evt.target.value);
+    const [newOffer] = offersByType;
 
     this.updateData({
       eventType: evt.target.value,
@@ -320,8 +325,8 @@ export default class EventEdit extends SmartView {
   _eventDestinationChangeHandler(evt) {
 
 
-    const [newDestination] = this._destinations.filter((destination) => destination.name === evt.target.value)
-    const destinationList = this._destinations.map((city) => city.name)
+    const [newDestination] = this._destinations.filter((destination) => destination.name === evt.target.value);
+    const destinationList = this._destinations.map((city) => city.name);
 
     if (destinationList.includes(evt.target.value)) {
       this.updateData({
@@ -332,12 +337,6 @@ export default class EventEdit extends SmartView {
         isDestinationPhoto: newDestination.pictures.length !== 0
       });
     } else {
-      //this.updateData({
-      //  destination: evt.target.value,
-      //isDestinationInfo: false,
-      //isDestinationPhoto: false
-      //});
-
       this.getElement().querySelector(`.event__save-btn`).setAttribute(`disabled`, `true`);
     }
   }
@@ -345,7 +344,7 @@ export default class EventEdit extends SmartView {
   _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
-     }
+  }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
@@ -375,17 +374,17 @@ export default class EventEdit extends SmartView {
 
   static parseEventToData(trip, allOffers) {
 
-    const [offersByType] = allOffers.filter((offer)=> offer.type===trip.eventType);
+    const [offersByType] = allOffers.filter((offer)=> offer.type === trip.eventType);
 
-     return Object.assign(
+    return Object.assign(
         {},
         trip,
-      {
-        offersList: offersByType.offers,
-        isOffers: offersByType.offers.length !== 0,
-        isDestinationInfo: trip.destinationInfo.length !== 0,
-        isDestinationPhoto: trip.destinationPhoto.length !== 0
-      }
+        {
+          offersList: offersByType.offers,
+          isOffers: offersByType.offers.length !== 0,
+          isDestinationInfo: trip.destinationInfo.length !== 0,
+          isDestinationPhoto: trip.destinationPhoto.length !== 0
+        }
     );
   }
 

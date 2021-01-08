@@ -3,7 +3,6 @@ import {generateId} from "../view/mock.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../utils/utils.js";
 
-
 export default class EventNew {
 
   constructor(eventsListContainer, changeData) {
