@@ -20,13 +20,12 @@ const createTripItemTemplate = (trip) => {
 
   const createTripOffersTemplate = (data) => {
 
-    return Object.values(data).filter((offer) => offer.isAdded).map(({type, price}) =>
-    //  offersArray.filter((offer) => offer.isAdded).map(({type, price}) =>
+    return data.map(({title, price}) =>
       `<li class="event__offer">
-  <span class="event__offer-title">${type}</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">${price}</span>
-</li>`).join(``);
+        <span class="event__offer-title">${title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${price}</span>
+      </li>`).join(``);
   };
 
   const tripOffersTemplate = createTripOffersTemplate(offers);

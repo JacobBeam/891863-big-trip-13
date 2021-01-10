@@ -1,13 +1,32 @@
 import Observer from "../utils/observer.js";
-
 export default class Points extends Observer {
   constructor() {
     super();
     this._points = [];
+    this._offers = [];
+    this._destinations = [];
   }
 
-  setPoints(points) {
+  setAllOffers(offers) {
+    this._offers = offers.slice();
+  }
+
+  getAllOffers() {
+    return this._offers;
+  }
+
+  setAllDestinations(destinations) {
+    this._destinations = destinations.slice();
+
+  }
+
+  getAllDestinations() {
+    return this._destinations;
+  }
+
+  setPoints(updateType, points) {
     this._points = points.slice();
+    this._notify(updateType);
   }
 
   getPoints() {
@@ -54,4 +73,66 @@ export default class Points extends Observer {
     this._notify(updateType);
   }
 
+  static adaptToClient(point) {
+
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          eventType: point.type,
+          destination: point.destination.name,
+
+          startDate: new Date(point.date_from),
+          endDate: new Date(point.date_to),
+          destinationInfo: point.destination.description,
+          eventPrice: point.base_price,
+          isFavorite: point.is_favorite,
+          destinationPhoto: point.destination.pictures,
+        }
+    );
+
+
+    delete adaptedPoint.type;
+    delete adaptedPoint.destination.name;
+    delete adaptedPoint.destination.description;
+    delete adaptedPoint.destination.pictures;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.date_to;
+    delete adaptedPoint.base_price;
+    delete adaptedPoint.is_favorite;
+
+    return adaptedPoint;
+  }
+
+
+  static adaptToServer(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          "type": point.eventType.toLowerCase(),
+          "destination": {
+            "name": point.destination,
+            "description": point.destinationInfo,
+            "pictures": point.destinationPhoto
+          },
+          "date_from": point.startDate.toISOString(),
+          "date_to": point.endDate.toISOString(),
+          "base_price": +point.eventPrice,
+          "is_favorite": point.isFavorite,
+        }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedPoint.eventType;
+    delete adaptedPoint.destinationInfo;
+    delete adaptedPoint.destinationPhoto;
+    delete adaptedPoint.startDate;
+    delete adaptedPoint.endDate;
+    delete adaptedPoint.eventPrice;
+    delete adaptedPoint.isFavorite;
+
+
+    return adaptedPoint;
+  }
 }

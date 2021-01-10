@@ -26,15 +26,17 @@ export default class Event {
     this._handlerDeleteClick = this._handlerDeleteClick.bind(this);
   }
 
-  init(trip) {
+  init(trip, allDestinations, allOffers) {
     this._trip = trip;
+    this._dstinations = allDestinations;
+    this._offers = allOffers;
 
     const prevEventComponent = this._eventComponent;
     const prevEventEditComponent = this._eventEditComponent;
 
 
     this._eventComponent = new EventItemView(trip);
-    this._eventEditComponent = new EventEditView(trip);
+    this._eventEditComponent = new EventEditView(trip, allDestinations, allOffers);
 
     this._eventComponent.setEditClickHandler(this._handlerEditClick);
     this._eventEditComponent.setFormSubmitHandler(this._handlerFormSubmit);
@@ -106,6 +108,7 @@ export default class Event {
   }
 
   _handlerEditCloseClick() {
+    this._eventEditComponent.reset(this._trip);
     this._replaceFormToCard();
   }
 
