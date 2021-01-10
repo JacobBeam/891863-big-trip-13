@@ -12,7 +12,8 @@ const BLANK_EVENT = {
   endDate: (new Date()),
   destinationInfo: ``,
   destinationPhoto: [],
-  eventPrice: ``};
+  eventPrice: ``,
+  isFavorite: false};
 
 const createNewTripTemplate = (trip = BLANK_EVENT, allDestinations) => {
 
@@ -28,7 +29,10 @@ const createNewTripTemplate = (trip = BLANK_EVENT, allDestinations) => {
     eventPrice,
     isOffers,
     isDestinationInfo,
-    isDestinationPhoto} = trip;
+    isDestinationPhoto,
+    isDisabled,
+    isSaving
+  } = trip;
 
   const startDateValue = dayjs(startDate).format(`DD/MM/YY HH:MM`);
   const endDateValue = dayjs(endDate).format(`DD/MM/YY HH:MM`);
@@ -151,7 +155,7 @@ ${typesEventListtemplate}
       <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${eventPrice}" required>
     </div>
 
-    <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+    <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
           <span class="visually-hidden">Open event</span>
     </button>
@@ -176,7 +180,7 @@ export default class NewEvent extends SmartView {
     this._datepickerEnd = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._formCancelClickHandler = this._formCancelClickHandler.bind(this);
 
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
@@ -212,7 +216,7 @@ export default class NewEvent extends SmartView {
     this._setStartDatepicker();
     this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
-    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setCancelClickHandler(this._callback.cancelClick);
   }
 
   _setStartDatepicker() {
@@ -359,19 +363,19 @@ export default class NewEvent extends SmartView {
     this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
   }
 
-  _formDeleteClickHandler(evt) {
+  _formCancelClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteClick();
+    this._callback.cancelClick();
   }
 
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
+  setCancelClickHandler(callback) {
+    this._callback.cancelClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formCancelClickHandler);
   }
 
-  static parseEventToData(trip, offers) {
+  static parseEventToData(trip, allOffers) {
 
-    const [offersByType] = offers.filter((offer)=> offer.type === trip.eventType);
+    const [offersByType] = allOffers.filter((offer)=> offer.type === trip.eventType);
 
     return Object.assign(
         {},
@@ -380,7 +384,9 @@ export default class NewEvent extends SmartView {
           offersList: offersByType.offers,
           isOffers: offersByType.offers.length !== 0,
           isDestinationInfo: trip.destinationInfo.length !== 0,
-          isDestinationPhoto: trip.destinationPhoto.length !== 0
+          isDestinationPhoto: trip.destinationPhoto.length !== 0,
+          isDisabled: false,
+          isSaving: false
         }
     );
   }
@@ -389,10 +395,12 @@ export default class NewEvent extends SmartView {
   static parseDataToEvent(data) {
     let trip = Object.assign({}, data);
 
-    delete data.offersList;
-    delete data.isOffers;
-    delete data.isDestinationInfo;
-    delete data.isDestinationPhoto;
+    delete trip.offersList;
+    delete trip.isOffers;
+    delete trip.isDestinationInfo;
+    delete trip.isDestinationPhoto;
+    delete trip.isDisabled;
+    delete trip.isSaving;
 
     return trip;
   }

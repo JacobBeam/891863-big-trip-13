@@ -2,7 +2,7 @@ import SortView from "../view/trip-sort.js";
 import EventsListView from "../view/trip-list.js";
 import LoadingView from "../view/loading.js";
 import EmptyEventListView from "../view/event-empty.js";
-import EventPresenter from "./event.js";
+import EventPresenter, {State as EventPresenterViewState} from "./event.js";
 import TripInfoPresenter from "./trip-info.js";
 import EventNewPresenter from "./event-new.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
@@ -99,15 +99,38 @@ export default class Board {
     // update - обновленные данные
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._api.updatePoint(update).then((response)=>{
+        this._eventPresenter[update.id].setViewState(EventPresenterViewState.SAVING);
+        this._api.updatePoint(update)
+        .then((response)=>{
           this._pointsModel.updatePoint(updateType, response);
+        })
+        .catch(() => {
+          this._eventPresenter[update.id].setViewState(EventPresenterViewState.ABORTING);
         });
         break;
       case UserAction.ADD_POINT:
-        this._pointsModel.addPoint(updateType, update);
+        this._eventNewPresenter.setSaving();
+        this._api.addPoint(update)
+        .then((response) => {
+          this._pointsModel.addPoint(updateType, response);
+        })
+        .catch(() => {
+          this._eventNewPresenter.setAborting();
+        });
         break;
       case UserAction.DELETE_POINT:
-        this._pointsModel.deletePoint(updateType, update);
+        this._eventPresenter[update.id].setViewState(EventPresenterViewState.DELETING);
+        this._api.deletePoint(update)
+        .then(() => {
+          // метод удаления задачи на сервере
+          // ничего не возвращает. Это и верно,
+          // ведь что можно вернуть при удалении задачи?
+          // Поэтому в модель мы всё также передаем update
+          this._pointsModel.deletePoint(updateType, update);
+        })
+        .catch(() => {
+          this._eventPresenter[update.id].setViewState(EventPresenterViewState.ABORTING);
+        });
         break;
     }
   }

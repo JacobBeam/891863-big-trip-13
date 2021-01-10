@@ -1,5 +1,4 @@
 import EventNewView from "../view/event-new.js";
-import {generateId} from "../view/mock.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../utils/utils.js";
 
@@ -14,7 +13,7 @@ export default class EventNew {
 
     this._handlerFormSubmit = this._handlerFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-    this._handlerDeleteClick = this._handlerDeleteClick.bind(this);
+    this._handlerCancelClick = this._handlerCancelClick.bind(this);
   }
 
   init(callback, allDestinations, allOffers) {
@@ -25,7 +24,7 @@ export default class EventNew {
     }
 
     this._eventNewComponent = new EventNewView(allDestinations, allOffers);
-    this._eventNewComponent.setDeleteClickHandler(this._handlerDeleteClick);
+    this._eventNewComponent.setCancelClickHandler(this._handlerCancelClick);
     this._eventNewComponent.setFormSubmitHandler(this._handlerFormSubmit);
 
     render(this._eventsListContainer, this._eventNewComponent, RenderPosition.AFTERBEGIN);
@@ -50,16 +49,34 @@ export default class EventNew {
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
+  setSaving() {
+    this._eventNewComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._eventNewComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._eventNewComponent.shake(resetFormState);
+  }
+
   _handlerFormSubmit(trip) {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        Object.assign({id: generateId()}, trip)
+        trip
     );
-    this.destroy();
   }
 
-  _handlerDeleteClick() {
+  _handlerCancelClick() {
     this.destroy();
   }
 
