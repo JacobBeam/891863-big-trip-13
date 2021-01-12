@@ -20,6 +20,9 @@ const createEditTripTemplate = (data, allDestinations) => {
     isOffers,
     isDestinationInfo,
     isDestinationPhoto,
+    isDisabled,
+    isSaving,
+    isDeleting
   } = data;
 
   const startDateValue = dayjs(startDate).format(`DD/MM/YY HH:mm`);
@@ -143,8 +146,8 @@ ${typesEventListtemplate}
       <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${eventPrice}">
     </div>
 
-    <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
-    <button class="event__reset-btn" type="reset">Delete</button>
+    <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled || isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
+    <button class="event__reset-btn" type="reset"> ${isDeleting ? `Deleting...` : `Delete`}</button>
     <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
     </button>
@@ -383,7 +386,10 @@ export default class EventEdit extends SmartView {
           offersList: offersByType.offers,
           isOffers: offersByType.offers.length !== 0,
           isDestinationInfo: trip.destinationInfo.length !== 0,
-          isDestinationPhoto: trip.destinationPhoto.length !== 0
+          isDestinationPhoto: trip.destinationPhoto.length !== 0,
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
         }
     );
   }
@@ -396,6 +402,9 @@ export default class EventEdit extends SmartView {
     delete trip.isOffers;
     delete trip.isDestinationInfo;
     delete trip.isDestinationPhoto;
+    delete trip.isDisabled;
+    delete trip.isSaving;
+    delete trip.isDeleting;
 
     return trip;
   }
