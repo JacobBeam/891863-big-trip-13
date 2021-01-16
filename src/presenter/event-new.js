@@ -1,6 +1,8 @@
 import EventNewView from "../view/event-new.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../utils/utils.js";
+import {isOnline} from "../utils/utils.js";
+import {toast} from "../utils/toast/toast.js";
 
 export default class EventNew {
 
@@ -69,6 +71,13 @@ export default class EventNew {
   }
 
   _handlerFormSubmit(trip) {
+
+    if (!isOnline()) {
+      this._eventNewComponent.shake();
+      toast(`You can't save point offline`);
+      return;
+    }
+
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,

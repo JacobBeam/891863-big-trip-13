@@ -1,5 +1,8 @@
 import dayjs from "dayjs";
 
+export const isOnline = () => {
+  return window.navigator.onLine;
+};
 
 export const SortType = {
   DATE_DEFAULT: `date`,
