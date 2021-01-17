@@ -1004,3 +1004,30 @@ main {
 .shake {
     animation: shake 0.6s;
 }
+
+.page-header__error {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.4em;
+  padding-left: 0.4em;
+  margin-bottom: 0.4em;
+  width: 100%;
+  font-family: sans-serif;
+  font-size: 1.5em;
+  line-height: 1.5;
+  box-sizing: border-box;
+  background-color: rgba(255,255,255,0.5);
+  opacity: 0.5;
+}
+
+.page-header__error-text {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  color: #900;
+
+}
