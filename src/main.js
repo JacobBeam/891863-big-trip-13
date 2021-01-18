@@ -60,7 +60,7 @@ const apiWithProvider = new Provider(api, store);
 const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
 
-let siteMenuComponent = new MenuView();
+const siteMenuComponent = new MenuView();
 
 const filterPresenter = new FilterPresenter(menuElement, pointsModel, filterModel);
 const boardPresenter = new BoardPresenter(eventsContentElement, tripInfoElement, pointsModel, filterModel, apiWithProvider);

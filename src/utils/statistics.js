@@ -18,7 +18,7 @@ export const countTotalAmountByType = (points, type) => {
 
 export const countTotalTimeByType = (points, type) => {
 
-  let durationInMS = points.filter((point) => point.eventType === type.toLowerCase())
+  const durationInMS = points.filter((point) => point.eventType === type.toLowerCase())
     .reduce((cur, point) => cur + findDurationInMsec(point.startDate, point.endDate), 0);
 
   return (durationInMS / MSEC_IN_DAY).toFixed(2);
