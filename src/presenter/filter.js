@@ -4,9 +4,10 @@ import {UpdateType} from "../utils/utils.js";
 
 export default class Filter {
 
-  constructor(filterContainer, filterModel) {
+  constructor(filterContainer, pointsModel, filterModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
+    this._pointsModel = pointsModel;
 
     this._currentFilter = null;
 
@@ -16,23 +17,30 @@ export default class Filter {
     this._handlerFilterTypeChange = this._handlerFilterTypeChange.bind(this);
 
     this._filterModel.addObserver(this._handlerModelEvent);
+    this._pointsModel.addObserver(this._handlerModelEvent);
   }
 
   init() {
+    const pointsInfo = this._getPoints();
+
     this._currentFilter = this._filterModel.getFilter();
 
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterView(this._currentFilter);
+    this._filterComponent = new FilterView(this._currentFilter, pointsInfo);
     this._filterComponent.setFilterTypeChangeHandler(this._handlerFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
+      render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
       return;
     }
 
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
+  }
+
+  _getPoints() {
+    return this._pointsModel.getPoints().slice();
   }
 
   _handlerModelEvent() {

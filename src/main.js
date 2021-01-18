@@ -35,10 +35,9 @@ const menuElement = tripInfoElement.querySelector(`.trip-controls`);
 
 let siteMenuComponent = new MenuView();
 
-const filterPresenter = new FilterPresenter(menuElement, filterModel);
+const filterPresenter = new FilterPresenter(menuElement, pointsModel, filterModel);
 const boardPresenter = new BoardPresenter(eventsContentElement, tripInfoElement, pointsModel, filterModel, apiWithProvider);
 
-filterPresenter.init();
 boardPresenter.init();
 
 let statisticsComponent = null;
@@ -59,6 +58,7 @@ const handleSiteMenuClick = (menuItem) => {
       boardPresenter.destroy({saveTripInfo: true});
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
       render(eventsContentElement, statisticsComponent, RenderPosition.AFTER);
+
       break;
   }
 };
@@ -93,12 +93,13 @@ Promise.all([
     pointsModel.setAllOffers(offers);
     pointsModel.setPoints(UpdateType.INIT, points);
 
-    render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
+    filterPresenter.init();
+    render(menuElement, siteMenuComponent, RenderPosition.AFTERBEGIN);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   })
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
-    render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
+    render(menuElement, siteMenuComponent, RenderPosition.AFTERBEGIN);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
 
