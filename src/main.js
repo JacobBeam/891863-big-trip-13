@@ -12,7 +12,7 @@ import Provider from "./api/provider.js";
 import {toast} from "./utils/toast/toast.js";
 import NetworkErrorView from "./view/network-error.js";
 
-const AUTHORIZATION = `Basic spdoufr5SDfyksdlf3a`;
+const AUTHORIZATION = `Basic spdoufr5SDfyksdlf3a5`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
 const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v13`;
