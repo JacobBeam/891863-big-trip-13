@@ -92,7 +92,7 @@ ${photo.map((value) => `<img class="event__photo" src= "${value.src}" alt="${val
   ${photoTemplate ? photoTemplate : ``}
   </section> `;
     }
-      return ``;
+    return ``;
 
   };
 

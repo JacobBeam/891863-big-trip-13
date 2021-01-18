@@ -88,17 +88,17 @@ Promise.all([
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
 
-  pointAddButton.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
+pointAddButton.addEventListener(`click`, (evt) => {
+  evt.preventDefault();
 
-    if (!isOnline()) {
-      toast(`You can't create new point offline`);
-      return;
-    }
+  if (!isOnline()) {
+    toast(`You can't create new point offline`);
+    return;
+  }
 
-    boardPresenter.createPoint(handlerPointNewFormClose);
-    evt.target.disabled = true;
-  });
+  boardPresenter.createPoint(handlerPointNewFormClose);
+  evt.target.disabled = true;
+});
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`./sw.js`);

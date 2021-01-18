@@ -3,8 +3,8 @@ import {FilterType} from "../utils/utils.js";
 
 const createFilterTemplate = (currentFilterType, points) => {
 
- const isFuturePoints = (points.slice().filter((point) => point.startDate>=new Date()).length) > 0;
- const isPastPoints = (points.slice().filter((point) => point.endDate < new Date()).length) > 0;
+  const isFuturePoints = (points.slice().filter((point) => point.startDate >= new Date()).length) > 0;
+  const isPastPoints = (points.slice().filter((point) => point.endDate < new Date()).length) > 0;
 
   return `<form class="trip-filters" action="#" method="get">
   <h2 class="visually-hidden">Filter events</h2>
@@ -25,7 +25,7 @@ const createFilterTemplate = (currentFilterType, points) => {
 
   <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`;
-}
+};
 export default class Filter extends AbstractView {
 
   constructor(currentFilterType, points) {
