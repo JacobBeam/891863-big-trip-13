@@ -91,9 +91,9 @@ ${photo.map((value) => `<img class="event__photo" src= "${value.src}" alt="${val
   ${infoTemplate ? infoTemplate : ``}
   ${photoTemplate ? photoTemplate : ``}
   </section> `;
-    } else {
-      return ``;
     }
+      return ``;
+
   };
 
   const destinationTemplate = createDestinationTemplate(destinationInfoTemplate, isDestinationInfo, destinationPhotoTemplate, isDestinationPhoto);

@@ -26,7 +26,7 @@ export default class Points extends Observer {
 
   setPoints(updateType, points) {
     this._points = points.slice();
-    this._notify(updateType);
+    this.notify(updateType);
   }
 
   getPoints() {
@@ -46,7 +46,7 @@ export default class Points extends Observer {
       ...this._points.slice(index + 1)
     ];
 
-    this._notify(updateType, update);
+    this.notify(updateType, update);
   }
 
   addPoint(updateType, update) {
@@ -55,7 +55,7 @@ export default class Points extends Observer {
       ...this._points
     ];
 
-    this._notify(updateType, update);
+    this.notify(updateType, update);
   }
 
   deletePoint(updateType, update) {
@@ -70,7 +70,7 @@ export default class Points extends Observer {
       ...this._points.slice(index + 1)
     ];
 
-    this._notify(updateType);
+    this.notify(updateType);
   }
 
   static adaptToClient(point) {

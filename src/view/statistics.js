@@ -15,10 +15,8 @@ const renderMoneyChart = (moneyCtx, points) => {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      //  Поменять на уникальные типы транспорта
       labels: TYPES,
       datasets: [{
-        //  Поменять в том же порядке стоимость по каждому маршруту
         data: totalPriceByType,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
@@ -87,10 +85,8 @@ const renderTimeSpendChart = (timeSpendCtx, points) => {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      //  Поменять на уникальные типы транспорта
       labels: TYPES,
       datasets: [{
-        //  Поменять на общее время по типу
         data: totalTimeByType,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
@@ -159,10 +155,8 @@ const renderTypeChart = (typeCtx, points) => {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      //  Поменять на уникальные типы транспорта
       labels: TYPES,
       datasets: [{
-        //  Поменять на общее количество по типу
         data: totalAmountByType,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,

@@ -7,7 +7,7 @@ const findDurationInMsec = (start, end) => {
 };
 
 export const countTotalPriceByType = (points, type) => {
-  return points.filter((point) => point.eventType === type.toLowerCase()).reduce((count, point) => count + (+point.eventPrice), 0);
+  return points.filter((point) => point.eventType === type.toLowerCase()).reduce((count, point) => count + Number(point.eventPrice), 0);
 };
 
 export const countTotalAmountByType = (points, type) => {
