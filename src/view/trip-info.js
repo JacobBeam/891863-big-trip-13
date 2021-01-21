@@ -2,12 +2,8 @@ import dayjs from "dayjs";
 import AbstractView from "./abstract.js";
 
 const createTripInfoTemplate = (trips) => {
-  let tripInfo = ``;
-  if (trips.length <= 3) {
-    tripInfo = trips.map((trip) => trip.destination).join(` &mdash; `);
-  } else {
-    tripInfo = `${trips[0].destination} &mdash; ...  &mdash; ${trips[trips.length - 1].destination}`;
-  }
+
+  const tripInfo = (trips.length <= 3) ? trips.map((trip) => trip.destination).join(` &mdash; `) : `${trips[0].destination} &mdash; ...  &mdash; ${trips[trips.length - 1].destination}`;
 
   const startTripDate = dayjs(trips[0].startDate).format(`MMM DD`);
   const endTripDate = dayjs(trips[trips.length - 1].endDate).format(`MMM DD`);

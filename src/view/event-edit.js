@@ -38,7 +38,7 @@ const createEditTripTemplate = (data, allDestinations) => {
 
 ${offersByType.map(({title, price}, index) => {
   // Перебирать все значения возможных предложений, на каждом шаге искать в предложениях для точки соответствие текущего предложения по title и price, если соответствует, то ставить флаг в checked
-    let isChecked = offersData.find((offer) => offer.title === title && offer.price === price) ? true : false;
+    const isChecked = offersData.find((offer) => offer.title === title && offer.price === price) ? true : false;
 
     return `<div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${index}" type="checkbox" value="${index}" name="event-offer-${index}" ${isChecked ? `checked` : ``}>
@@ -83,9 +83,9 @@ ${photo.map((value) => `<img class="event__photo" src= "${value.src}" alt="${val
   ${infoTemplate ? infoTemplate : ``}
   ${photoTemplate ? photoTemplate : ``}
   </section> `;
-    } else {
-      return ``;
     }
+    return ``;
+
   };
 
   const destinationTemplate = createDestinationTemplate(destinationInfoTemplate, isDestinationInfo, destinationPhotoTemplate, isDestinationPhoto);

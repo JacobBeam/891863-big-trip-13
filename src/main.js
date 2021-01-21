@@ -12,36 +12,22 @@ import Provider from "./api/provider.js";
 import {toast} from "./utils/toast/toast.js";
 import NetworkErrorView from "./view/network-error.js";
 
-const AUTHORIZATION = `Basic spdoufr5SDfyksdlf`;
+const AUTHORIZATION = `Basic spdoufr5SDfyksdlf3a5`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
 const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v13`;
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const headerElement = document.querySelector(`.page-body__container`);
-const networkErrorComponent = new NetworkErrorView();
-
-const api = new Api(END_POINT, AUTHORIZATION);
-const store = new Store(STORE_NAME, window.localStorage);
-const apiWithProvider = new Provider(api, store);
-
-const pointsModel = new PointsModel();
-const filterModel = new FilterModel();
-
-
 const tripInfoElement = document.querySelector(`.trip-main`);
 const eventsContentElement = document.querySelector(`.trip-events`);
 const menuElement = tripInfoElement.querySelector(`.trip-controls`);
-
-let siteMenuComponent = new MenuView();
-
-const filterPresenter = new FilterPresenter(menuElement, filterModel);
-const boardPresenter = new BoardPresenter(eventsContentElement, tripInfoElement, pointsModel, filterModel, apiWithProvider);
-
-filterPresenter.init();
-boardPresenter.init();
-
+const pointAddButton = tripInfoElement.querySelector(`.trip-main__event-add-btn`);
 let statisticsComponent = null;
+
+const handlerPointNewFormClose = () => {
+  pointAddButton.disabled = false;
+};
 
 const handleSiteMenuClick = (menuItem) => {
 
@@ -59,28 +45,27 @@ const handleSiteMenuClick = (menuItem) => {
       boardPresenter.destroy({saveTripInfo: true});
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
       render(eventsContentElement, statisticsComponent, RenderPosition.AFTER);
+
       break;
   }
 };
 
 
-const pointAddButton = tripInfoElement.querySelector(`.trip-main__event-add-btn`);
+const networkErrorComponent = new NetworkErrorView();
 
-const handlerPointNewFormClose = () => {
-  pointAddButton.disabled = false;
-};
+const api = new Api(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
-pointAddButton.addEventListener(`click`, (evt) => {
-  evt.preventDefault();
+const pointsModel = new PointsModel();
+const filterModel = new FilterModel();
 
-  if (!isOnline()) {
-    toast(`You can't create new point offline`);
-    return;
-  }
+const siteMenuComponent = new MenuView();
 
-  boardPresenter.createPoint(handlerPointNewFormClose);
-  evt.target.disabled = true;
-});
+const filterPresenter = new FilterPresenter(menuElement, pointsModel, filterModel);
+const boardPresenter = new BoardPresenter(eventsContentElement, tripInfoElement, pointsModel, filterModel, apiWithProvider);
+
+boardPresenter.init();
 
 
 Promise.all([
@@ -93,15 +78,27 @@ Promise.all([
     pointsModel.setAllOffers(offers);
     pointsModel.setPoints(UpdateType.INIT, points);
 
-    render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
+    filterPresenter.init();
+    render(menuElement, siteMenuComponent, RenderPosition.AFTERBEGIN);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   })
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
-    render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
+    render(menuElement, siteMenuComponent, RenderPosition.AFTERBEGIN);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
 
+pointAddButton.addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+
+  if (!isOnline()) {
+    toast(`You can't create new point offline`);
+    return;
+  }
+
+  boardPresenter.createPoint(handlerPointNewFormClose);
+  evt.target.disabled = true;
+});
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`./sw.js`);
