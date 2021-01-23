@@ -396,7 +396,7 @@ export default class EventEdit extends SmartView {
 
   static parseDataToEvent(data) {
 
-    let trip = Object.assign({}, data);
+    const trip = Object.assign({}, data);
 
     delete trip.offersList;
     delete trip.isOffers;

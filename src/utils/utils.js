@@ -45,7 +45,7 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
 export const shuffle = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
@@ -66,7 +66,7 @@ export const findEventDuration = (start, end) => {
       stringDuration = `${duration}M`;
     }
   } else if (duration < 60 * 24) {
-    let hours = Math.floor(duration / 60);
+    const hours = Math.floor(duration / 60);
 
     if (hours < 10) {
       stringDuration = `0${hours}H`;
@@ -74,7 +74,7 @@ export const findEventDuration = (start, end) => {
       stringDuration = `${hours}H`;
     }
 
-    let minutes = duration - hours * 60;
+    const minutes = duration - hours * 60;
     if (minutes < 10) {
       stringDuration += ` 0${minutes}M`;
     } else if (minutes === 0) {
@@ -83,21 +83,21 @@ export const findEventDuration = (start, end) => {
       stringDuration += ` ${minutes}M`;
     }
   } else {
-    let days = Math.floor(duration / 60 / 24);
+    const days = Math.floor(duration / 60 / 24);
     if (days < 10) {
       stringDuration = `0${days}D`;
     } else {
       stringDuration = `${days}D`;
     }
 
-    let hours = Math.floor((duration - days * 24 * 60) / 60);
+    const hours = Math.floor((duration - days * 24 * 60) / 60);
     if (hours < 10) {
       stringDuration += ` 0${hours}H`;
     } else {
       stringDuration += ` ${hours}H`;
     }
 
-    let minutes = duration - days * 24 * 60 - hours * 60;
+    const minutes = duration - days * 24 * 60 - hours * 60;
     if (minutes < 10) {
       stringDuration += ` 0${minutes}M`;
     } else if (minutes === 0) {
