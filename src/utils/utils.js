@@ -1,5 +1,9 @@
 import dayjs from "dayjs";
 
+const formatDuration = (duration) =>{
+  return (duration >= 0 && duration < 10) ? `0` + duration : duration;
+}
+
 export const isOnline = () => {
   return window.navigator.onLine;
 };
@@ -36,10 +40,10 @@ export const MenuItem = {
 };
 
 export const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
+  const lowerValue = Math.ceil(Math.min(a, b));
+  const upperValue = Math.floor(Math.max(a, b));
 
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
+  return Math.floor(lowerValue + Math.random() * (upperValue - lowerValue + 1));
 };
 
 
@@ -53,62 +57,97 @@ export const shuffle = (array) => {
 
 export const findEventDuration = (start, end) => {
 
-  const duration = dayjs(end).diff(dayjs(start), `minute`);
+  let durationInDay = dayjs(end).diff(dayjs(start), `day`)
+  end = dayjs(end).subtract(durationInDay, `day`)
+  let durationInHours = dayjs(end).diff(dayjs(start), `hour`);
+  end = dayjs(end).subtract(durationInHours, `hour`)
+  let durationInMinutes = dayjs(end).diff(dayjs(start), `minute`);
+ durationInMinutes = formatDuration(durationInMinutes) + `M`;
 
-  let stringDuration = ``;
+ if ((durationInDay > 0) || ( durationInHours > 0)) {
+    durationInHours =formatDuration(durationInHours) + `H`;
+  } else { durationInHours = `` };
 
-  if (duration < 60) {
-    if (duration < 10) {
-      stringDuration = `0${duration}M`;
-    } else if (duration === 0) {
-      stringDuration = `00M`;
-    } else {
-      stringDuration = `${duration}M`;
-    }
-  } else if (duration < 60 * 24) {
-    const hours = Math.floor(duration / 60);
+ durationInDay = (durationInDay > 0) ? formatDuration(durationInDay) + `D` : ``;
 
-    if (hours < 10) {
-      stringDuration = `0${hours}H`;
-    } else {
-      stringDuration = `${hours}H`;
-    }
+  return `${durationInDay} ${durationInHours} ${durationInMinutes}`
 
-    const minutes = duration - hours * 60;
-    if (minutes < 10) {
-      stringDuration += ` 0${minutes}M`;
-    } else if (minutes === 0) {
-      stringDuration += ` 00M`;
-    } else {
-      stringDuration += ` ${minutes}M`;
-    }
-  } else {
-    const days = Math.floor(duration / 60 / 24);
-    if (days < 10) {
-      stringDuration = `0${days}D`;
-    } else {
-      stringDuration = `${days}D`;
-    }
 
-    const hours = Math.floor((duration - days * 24 * 60) / 60);
-    if (hours < 10) {
-      stringDuration += ` 0${hours}H`;
-    } else {
-      stringDuration += ` ${hours}H`;
-    }
+  //let days = timeEnd.diff(timeStart, `day`);
+  //timeEnd = timeEnd.subtract(days, `day`);
+  //let hours = timeEnd.diff(timeStart, `hour`);
+  //timeEnd = timeEnd.subtract(hours, `hour`);
+  //let minutes = timeEnd.diff(timeStart, `minute`);
+  //timeEnd = timeEnd.subtract(minutes, `minute`);
+  //days = (days === 0) ? `` : getNumberWithZero(days) + `D`;
+  //minutes = (minutes === 0) ? `00M` : getNumberWithZero(minutes) + `M`;
+  //if (days !== 0 && hours === 0) {
+  //  hours = `00H`;
+  //} else if (days === 0 && hours === 0) {
+  //  hours = ``;
+  //} else {
+  //  hours = getNumberWithZero(hours) + `H`;
+  //}
+  //return `${days} ${hours} ${minutes}`;
 
-    const minutes = duration - days * 24 * 60 - hours * 60;
-    if (minutes < 10) {
-      stringDuration += ` 0${minutes}M`;
-    } else if (minutes === 0) {
-      stringDuration += ` 00M`;
-    } else {
-      stringDuration += ` ${minutes}M`;
-    }
 
-  }
 
-  return stringDuration;
+  //const duration = dayjs(end).diff(dayjs(start), `minute`);
+
+  //let durationtextValue = ``;
+
+  //if (duration < 60) {
+  //  if (duration < 10) {
+  //    durationtextValue = `0${duration}M`;
+  //  } else if (duration === 0) {
+  //    durationtextValue = `00M`;
+  //  } else {
+  //    durationtextValue = `${duration}M`;
+  //  }
+  //} else if (duration < 60 * 24) {
+  //  const hours = Math.floor(duration / 60);
+
+  //  if (hours < 10) {
+  //    durationtextValue = `0${hours}H`;
+  //  } else {
+  //    durationtextValue = `${hours}H`;
+  //  }
+
+  //  const minutes = duration - hours * 60;
+  //  if (minutes < 10) {
+  //    durationtextValue += ` 0${minutes}M`;
+  //  } else if (minutes === 0) {
+  //    durationtextValue += ` 00M`;
+  //  } else {
+  //    durationtextValue += ` ${minutes}M`;
+  //  }
+  //} else {
+  //  const days = Math.floor(duration / 60 / 24);
+  //  if (days < 10) {
+  //    durationtextValue = `0${days}D`;
+  //  } else {
+  //    durationtextValue = `${days}D`;
+  //  }
+
+  //  const hours = Math.floor((duration - days * 24 * 60) / 60);
+  //  if (hours < 10) {
+  //    durationtextValue += ` 0${hours}H`;
+  //  } else {
+  //    durationtextValue += ` ${hours}H`;
+  //  }
+
+  //  const minutes = duration - days * 24 * 60 - hours * 60;
+  //  if (minutes < 10) {
+  //    durationtextValue += ` 0${minutes}M`;
+  //  } else if (minutes === 0) {
+  //    durationtextValue += ` 00M`;
+  //  } else {
+  //    durationtextValue += ` ${minutes}M`;
+  //  }
+
+  //}
+
+  //return durationtextValue;
 };
 
 export const sortDate = (a, b) => {

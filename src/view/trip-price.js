@@ -8,7 +8,7 @@ const createTripPriceTemplate = (trips) => {
   Total: &euro;&nbsp;<span class="trip-info__cost-value">${eventsPrice}</span>
 </p>`;
 };
-export default class TotalPrice extends AbstractView {
+export default class TripPrice extends AbstractView {
 
   constructor(trips) {
     super();

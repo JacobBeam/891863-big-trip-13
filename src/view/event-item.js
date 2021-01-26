@@ -14,8 +14,8 @@ const createTripItemTemplate = (trip) => {
     isFavorite} = trip;
 
   const eventDate = dayjs(startDate).format(`MMM DD`);
-  const eventStartTime = dayjs(startDate).format(`HH mm`);
-  const eventEndTime = dayjs(endDate).format(`HH mm`);
+  const eventStartTime = dayjs(startDate).format(`HH:mm`);
+  const eventEndTime = dayjs(endDate).format(`HH:mm`);
   const eventDuration = findEventDuration(startDate, endDate);
 
   const createTripOffersTemplate = (data) => {

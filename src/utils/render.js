@@ -46,14 +46,16 @@ export const renderTemplate = (container, template, place) => {
 };
 
 
-const checkInstanceOfAbstract = (element) => {
-  return (element instanceof Abstract) ? (element = element.getElement()) : element;
-};
-
 
 export const replace = (newChild, oldChild) => {
-  newChild = checkInstanceOfAbstract(newChild);
-  oldChild = checkInstanceOfAbstract(oldChild);
+  if (oldChild instanceof Abstract) {
+    oldChild = oldChild.getElement();
+  }
+
+  if (newChild instanceof Abstract) {
+    newChild = newChild.getElement();
+  }
+
 
   const parent = oldChild.parentElement;
 

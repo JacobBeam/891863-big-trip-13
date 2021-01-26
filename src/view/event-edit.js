@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import he from "he";
 import SmartView from "./smart.js";
 import {TYPES} from "../utils/const.js";
 
@@ -38,7 +39,11 @@ const createEditTripTemplate = (data, allDestinations) => {
 
 ${offersByType.map(({title, price}, index) => {
   // Перебирать все значения возможных предложений, на каждом шаге искать в предложениях для точки соответствие текущего предложения по title и price, если соответствует, то ставить флаг в checked
-    const isChecked = offersData.find((offer) => offer.title === title && offer.price === price) ? true : false;
+  //const isChecked = offersData.find((offer) => offer.title === title && offer.price === price) ? true : false;
+
+    const findSomeOffer = (offer)=> offer.title === title && offer.price === price;
+
+    const isChecked = offersData.some(findSomeOffer)
 
     return `<div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${index}" type="checkbox" value="${index}" name="event-offer-${index}" ${isChecked ? `checked` : ``}>
@@ -123,9 +128,9 @@ ${typesEventListtemplate}
       <label class="event__label  event__type-output" for="event-destination-1">
       ${eventType}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destination)}" list="destination-list-1">
       <datalist id="destination-list-1">
-      ${allDestinations.map((city)=>`<option value="${city.name}"></option>`).join(``)}
+      ${allDestinations.map((city)=>`<option value="${he.encode(city.name)}"></option>`).join(``)}
 
       </datalist>
     </div>
@@ -143,7 +148,7 @@ ${typesEventListtemplate}
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${eventPrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" step="1" min="0" name="event-price" value="${eventPrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled || isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
@@ -189,9 +194,18 @@ export default class EventEdit extends SmartView {
   removeElement() {
     super.removeElement();
 
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
+    if (this._datepickerStart) {
+      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
+      // которые создает flatpickr при инициализации
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+
+    if (this._datepickerEnd) {
+      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
+      // которые создает flatpickr при инициализации
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
     }
   }
 
@@ -209,6 +223,7 @@ export default class EventEdit extends SmartView {
     this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setEditCloseClickHandler(this._callback.editCloseClick);
+    this.setDeleteClickHandler(this._callback.deleteClick)
   }
 
   _setStartDatepicker() {

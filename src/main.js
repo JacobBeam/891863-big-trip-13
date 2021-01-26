@@ -12,7 +12,7 @@ import Provider from "./api/provider.js";
 import {toast} from "./utils/toast/toast.js";
 import NetworkErrorView from "./view/network-error.js";
 
-const AUTHORIZATION = `Basic spdoufr5SDfyksdlf3a5`;
+const AUTHORIZATION = `Basic spdoufr5SDfyksdlf`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
 const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v13`;
@@ -35,9 +35,11 @@ const handleSiteMenuClick = (menuItem) => {
 
   switch (menuItem) {
     case MenuItem.TABLE:
+
       boardPresenter.destroy();
       remove(statisticsComponent);
       boardPresenter.init();
+      pointAddButton.disabled = false;
       break;
 
     case MenuItem.STATISTICS:
@@ -45,7 +47,7 @@ const handleSiteMenuClick = (menuItem) => {
       boardPresenter.destroy({saveTripInfo: true});
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
       render(eventsContentElement, statisticsComponent, RenderPosition.AFTER);
-
+      pointAddButton.disabled = true;
       break;
   }
 };

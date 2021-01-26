@@ -107,7 +107,7 @@ const renderTimeSpendChart = (timeSpendCtx, points) => {
       },
       title: {
         display: true,
-        text: `TYME-SPEND`,
+        text: `TIME-SPEND`,
         fontColor: `#000000`,
         fontSize: 23,
         position: `left`
