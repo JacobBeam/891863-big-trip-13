@@ -1,5 +1,6 @@
 import AbstractView from "./abstract.js";
 
+const ERROR_IMPLEMENT = `Abstract method not implemented: resetHandlers`;
 export default class Smart extends AbstractView {
   constructor() {
     super();
@@ -37,6 +38,6 @@ export default class Smart extends AbstractView {
   }
 
   restoreHandlers() {
-    throw new Error(`Abstract method not implemented: resetHandlers`);
+    throw new Error(ERROR_IMPLEMENT);
   }
 }

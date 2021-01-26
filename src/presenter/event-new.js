@@ -6,6 +6,11 @@ import {isOnline} from "../utils/utils.js";
 import {BLANK_EVENT} from "../utils/const.js";
 import {toast} from "../utils/toast/toast.js";
 
+const KEYDOWN_EVENT = `keydown`;
+const TOAST_ERROR_SAVE = `You can't save point offline`;
+const KEY_ESCAPE = `Escape`;
+const KEY_ESC = `Esc`;
+
 export default class EventNew {
 
   constructor(eventsListContainer, changeData) {
@@ -15,9 +20,9 @@ export default class EventNew {
     this._eventNewComponent = null;
     this._destroyCallback = null;
 
-    this._handlerFormSubmit = this._handlerFormSubmit.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-    this._handlerCancelClick = this._handlerCancelClick.bind(this);
+    this._handleCancelClick = this._handleCancelClick.bind(this);
   }
 
   init(callback, allDestinations, allOffers) {
@@ -31,14 +36,14 @@ export default class EventNew {
 
     //this._eventNewComponent = new EventNewView(allDestinations, allOffers, isAdded);
     this._eventNewComponent = new EventFormView(BLANK_EVENT,allDestinations, allOffers, isAdded);
-  //this._eventNewComponent.setDeletelClickHandler(this._handlerCancelClick);
-    this._eventNewComponent.setCancelClickHandler(this._handlerCancelClick);
-    this._eventNewComponent.setFormSubmitHandler(this._handlerFormSubmit);
+  //this._eventNewComponent.setDeletelClickHandler(this._handleCancelClick);
+    this._eventNewComponent.setCancelClickHandler(this._handleCancelClick);
+    this._eventNewComponent.setFormSubmitHandler(this._handleFormSubmit);
 
     render(this._eventsListContainer, this._eventNewComponent, RenderPosition.AFTERBEGIN);
 
 
-    document.addEventListener(`keydown`, this._escKeyDownHandler);
+    document.addEventListener(KEYDOWN_EVENT, this._escKeyDownHandler);
 
   }
 
@@ -54,7 +59,7 @@ export default class EventNew {
     remove(this._eventNewComponent);
     this._eventNewComponent = null;
 
-    document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    document.removeEventListener(KEYDOWN_EVENT, this._escKeyDownHandler);
   }
 
   setSaving() {
@@ -76,11 +81,11 @@ export default class EventNew {
     this._eventNewComponent.shake(resetFormState);
   }
 
-  _handlerFormSubmit(trip) {
+  _handleFormSubmit(trip) {
 
     if (!isOnline()) {
       this._eventNewComponent.shake();
-      toast(`You can't save point offline`);
+      toast(TOAST_ERROR_SAVE);
       return;
     }
 
@@ -91,12 +96,12 @@ export default class EventNew {
     );
   }
 
-  _handlerCancelClick() {
+  _handleCancelClick() {
     this.destroy();
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
+    if (evt.key === KEY_ESCAPE || evt.key === KEY_ESC) {
       evt.preventDefault();
       this.destroy();
     }

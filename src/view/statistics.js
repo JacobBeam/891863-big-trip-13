@@ -5,7 +5,27 @@ import {countTotalPriceByType, countTotalAmountByType, countTotalTimeByType} fro
 import {TYPES} from "../utils/const.js";
 
 const BAR_HEIGHT = 55;
-
+const TYPE_CHART = `horizontalBar`;
+const ANCHOR_START_CHART = `start`;
+const ANCHOR_END_CHART = `end`;
+const ALIGH_CHART = `start`;
+const MONEY_FORMAT_CHART = `€`;
+const TIME_FORMAT_CHART = `D`;
+const TYPE_FORMAT_CHART = `x`;
+const MONEY_TEXT_CHART = `MONEY`;
+const TIME_TEXT_CHART = `TIME-SPEND`;
+const TYPE_TEXT_CHART = `TYPE`;
+const FONT_SIZE_TITLE_CHART = 23;
+const POSITION_TITLE_CHART = `left`;
+const PADDING_SCALES_CHART = 5;
+const FONT_SIZE_SCALES_CHART = 13;
+const BAR_THICKNESS_CHART = 40;
+const MIN_BAR_LENGTH = 50;
+const WHITE_COLOR = `#ffffff`;
+const BLACK_COLOR = `#000000`;
+const SELECTOR_MONEY_CHART = `.statistics__chart--money`;
+const SELECTOR_TRANSPORT_CHART = `.statistics__chart--transport`;
+const SELECTOR_TIME_CHART = `.statistics__chart--time`;
 
 const renderMoneyChart = (moneyCtx, points) => {
 
@@ -13,47 +33,47 @@ const renderMoneyChart = (moneyCtx, points) => {
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
-    type: `horizontalBar`,
+    type: TYPE_CHART,
     data: {
       labels: TYPES,
       datasets: [{
         data: totalPriceByType,
-        backgroundColor: `#ffffff`,
-        hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
+        backgroundColor: WHITE_COLOR,
+        hoverBackgroundColor: WHITE_COLOR,
+        anchor: ANCHOR_START_CHART
       }]
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13
+            size: FONT_SIZE_SCALES_CHART
           },
-          color: `#000000`,
-          anchor: `end`,
-          align: `start`,
-          formatter: (val) => `€ ${val}`
+          color: BLACK_COLOR,
+          anchor: ANCHOR_END_CHART,
+          align: ALIGH_CHART,
+          formatter: (val) => `${MONEY_FORMAT_CHART} ${val}`
         }
       },
       title: {
         display: true,
-        text: `MONEY`,
-        fontColor: `#000000`,
-        fontSize: 23,
-        position: `left`
+        text: MONEY_TEXT_CHART,
+        fontColor: BLACK_COLOR,
+        fontSize: FONT_SIZE_TITLE_CHART,
+        position: POSITION_TITLE_CHART
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: `#000000`,
-            padding: 5,
-            fontSize: 13,
+            fontColor: BLACK_COLOR,
+            padding: PADDING_SCALES_CHART,
+            fontSize: FONT_SIZE_SCALES_CHART,
           },
           gridLines: {
             display: false,
             drawBorder: false
           },
-          barThickness: 40,
+          barThickness: BAR_THICKNESS_CHART,
         }],
         xAxes: [{
           ticks: {
@@ -64,7 +84,7 @@ const renderMoneyChart = (moneyCtx, points) => {
             display: false,
             drawBorder: false
           },
-          minBarLength: 50
+          minBarLength: MIN_BAR_LENGTH
         }],
       },
       legend: {
@@ -83,47 +103,47 @@ const renderTimeSpendChart = (timeSpendCtx, points) => {
 
   return new Chart(timeSpendCtx, {
     plugins: [ChartDataLabels],
-    type: `horizontalBar`,
+    type: TYPE_CHART,
     data: {
       labels: TYPES,
       datasets: [{
         data: totalTimeByType,
-        backgroundColor: `#ffffff`,
-        hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
+        backgroundColor: WHITE_COLOR,
+        hoverBackgroundColor: WHITE_COLOR,
+        anchor: ANCHOR_START_CHART
       }]
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13
+            size: FONT_SIZE_SCALES_CHART
           },
-          color: `#000000`,
-          anchor: `end`,
-          align: `start`,
-          formatter: (val) => `${val}D`
+          color: BLACK_COLOR,
+          anchor: ANCHOR_END_CHART,
+          align: ALIGH_CHART,
+          formatter: (val) => `${val}${TIME_FORMAT_CHART}`
         }
       },
       title: {
         display: true,
-        text: `TIME-SPEND`,
-        fontColor: `#000000`,
-        fontSize: 23,
-        position: `left`
+        text: TIME_TEXT_CHART,
+        fontColor: BLACK_COLOR,
+        fontSize: FONT_SIZE_TITLE_CHART,
+        position: POSITION_TITLE_CHART
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: `#000000`,
-            padding: 5,
-            fontSize: 13,
+            fontColor: BLACK_COLOR,
+            padding: PADDING_SCALES_CHART,
+            fontSize: FONT_SIZE_SCALES_CHART,
           },
           gridLines: {
             display: false,
             drawBorder: false
           },
-          barThickness: 40,
+          barThickness: BAR_THICKNESS_CHART,
         }],
         xAxes: [{
           ticks: {
@@ -134,7 +154,7 @@ const renderTimeSpendChart = (timeSpendCtx, points) => {
             display: false,
             drawBorder: false
           },
-          minBarLength: 50
+          minBarLength: MIN_BAR_LENGTH
         }],
       },
       legend: {
@@ -153,47 +173,47 @@ const renderTypeChart = (typeCtx, points) => {
 
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
-    type: `horizontalBar`,
+    type: TYPE_CHART,
     data: {
       labels: TYPES,
       datasets: [{
         data: totalAmountByType,
-        backgroundColor: `#ffffff`,
-        hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
+        backgroundColor: WHITE_COLOR,
+        hoverBackgroundColor: WHITE_COLOR,
+        anchor: ANCHOR_START_CHART
       }]
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13
+            size: FONT_SIZE_SCALES_CHART
           },
-          color: `#000000`,
-          anchor: `end`,
-          align: `start`,
-          formatter: (val) => `${val}x`
+          color: BLACK_COLOR,
+          anchor: ANCHOR_END_CHART,
+          align: ALIGH_CHART,
+          formatter: (val) => `${val}${TYPE_FORMAT_CHART}`
         }
       },
       title: {
         display: true,
-        text: `TYPE`,
-        fontColor: `#000000`,
-        fontSize: 23,
-        position: `left`
+        text: TYPE_TEXT_CHART,
+        fontColor: BLACK_COLOR,
+        fontSize: FONT_SIZE_TITLE_CHART,
+        position: POSITION_TITLE_CHART
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: `#000000`,
-            padding: 5,
-            fontSize: 13,
+            fontColor: BLACK_COLOR,
+            padding: PADDING_SCALES_CHART,
+            fontSize: FONT_SIZE_SCALES_CHART,
           },
           gridLines: {
             display: false,
             drawBorder: false
           },
-          barThickness: 40,
+          barThickness: BAR_THICKNESS_CHART,
         }],
         xAxes: [{
           ticks: {
@@ -204,7 +224,7 @@ const renderTypeChart = (typeCtx, points) => {
             display: false,
             drawBorder: false
           },
-          minBarLength: 50
+          minBarLength: MIN_BAR_LENGTH
         }],
       },
       legend: {
@@ -278,9 +298,9 @@ export default class Statistics extends SmartView {
       this._timeSpendChart = null;
     }
 
-    const moneyChartCtx = this.getElement().querySelector(`.statistics__chart--money`);
-    const typeChartCtx = this.getElement().querySelector(`.statistics__chart--transport`);
-    const timeSpendChartCtx = this.getElement().querySelector(`.statistics__chart--time`);
+    const moneyChartCtx = this.getElement().querySelector(SELECTOR_MONEY_CHART);
+    const typeChartCtx = this.getElement().querySelector(SELECTOR_TRANSPORT_CHART);
+    const timeSpendChartCtx = this.getElement().querySelector(SELECTOR_TIME_CHART);
 
 
     moneyChartCtx.height = BAR_HEIGHT * TYPES.length;

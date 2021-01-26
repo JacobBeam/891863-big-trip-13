@@ -18,14 +18,26 @@ const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v13`;
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
-const headerElement = document.querySelector(`.page-body__container`);
-const tripInfoElement = document.querySelector(`.trip-main`);
-const eventsContentElement = document.querySelector(`.trip-events`);
-const menuElement = tripInfoElement.querySelector(`.trip-controls`);
-const pointAddButton = tripInfoElement.querySelector(`.trip-main__event-add-btn`);
+const CLICK_EVENT = `click`;
+const ONLINE_EVENT = `online`;
+const OFFLINE_EVENT = `offline`;
+const LOAD_EVENT = `load`;
+const SW_FILE_NAME = `./sw.js`;
+const TOAST_ERROR_CREATE = `You can't create new point offline`;
+const SELECTOR_PAGE_BODY_CONTAINER = `.page-body__container`;
+const SELECTOR_TRIP_MAIN = `.trip-main`;
+const SELECTOR_TRIP_EVENTS = `.trip-events`;
+const SELECTOR_TRIP_CONTROLS = `.trip-controls`;
+const SELECTOR_EVENT_ADD_BTN = `.trip-main__event-add-btn`;
+
+const headerElement = document.querySelector(SELECTOR_PAGE_BODY_CONTAINER);
+const tripInfoElement = document.querySelector(SELECTOR_TRIP_MAIN);
+const eventsContentElement = document.querySelector(SELECTOR_TRIP_EVENTS);
+const menuElement = tripInfoElement.querySelector(SELECTOR_TRIP_CONTROLS);
+const pointAddButton = tripInfoElement.querySelector(SELECTOR_EVENT_ADD_BTN);
 let statisticsComponent = null;
 
-const handlerPointNewFormClose = () => {
+const handlePointNewFormClose = () => {
   pointAddButton.disabled = false;
 };
 
@@ -90,25 +102,25 @@ Promise.all([
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
 
-pointAddButton.addEventListener(`click`, (evt) => {
+pointAddButton.addEventListener(CLICK_EVENT, (evt) => {
   evt.preventDefault();
 
   if (!isOnline()) {
-    toast(`You can't create new point offline`);
+    toast(TOAST_ERROR_CREATE);
     return;
   }
 
-  boardPresenter.createPoint(handlerPointNewFormClose);
+  boardPresenter.createPoint(handlePointNewFormClose);
   evt.target.disabled = true;
 });
 
-window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`./sw.js`);
+window.addEventListener(LOAD_EVENT, () => {
+  navigator.serviceWorker.register(SW_FILE_NAME);
 });
 
 
-window.addEventListener(`online`, () => {
-  document.title = document.title.replace(` [offline]`, ``);
+window.addEventListener(ONLINE_EVENT, () => {
+  document.title = document.title.replace(` [${OFFLINE_EVENT}]`, ``);
 
   remove(networkErrorComponent);
 
@@ -117,8 +129,8 @@ window.addEventListener(`online`, () => {
   }
 });
 
-window.addEventListener(`offline`, () => {
-  document.title += ` [offline]`;
+window.addEventListener(OFFLINE_EVENT, () => {
+  document.title += ` [${OFFLINE_EVENT}]`;
 
   render(headerElement, networkErrorComponent, RenderPosition.AFTERBEGIN);
 });

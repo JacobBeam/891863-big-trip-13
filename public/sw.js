@@ -4,8 +4,11 @@ const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
 
 const HTTP_STATUS_OK = 200;
 const RESPONSE_SAFE_TYPE = `basic`;
+const INSTALL_EVENT = `install`;
+const ACTIVATE_EVENT = `activate`;
+const FETCH_EVENT = `fetch`;
 
-self.addEventListener(`install`, (evt) => {
+self.addEventListener(INSTALL_EVENT, (evt) => {
   evt.waitUntil(
       caches.open(CACHE_NAME)
         .then((cache) => {
@@ -42,7 +45,7 @@ self.addEventListener(`install`, (evt) => {
   );
 });
 
-self.addEventListener(`activate`, (evt) => {
+self.addEventListener(ACTIVATE_EVENT, (evt) => {
   evt.waitUntil(
       // Получаем все названия кэшей
       caches.keys()
@@ -106,4 +109,4 @@ const handleFetch = (evt) => {
   );
 };
 
-self.addEventListener(`fetch`, handleFetch);
+self.addEventListener(FETCH_EVENT, handleFetch);

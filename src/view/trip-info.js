@@ -1,12 +1,16 @@
 import dayjs from "dayjs";
 import AbstractView from "./abstract.js";
 
+const EVENT_DATE_FORMAT = `MMM DD`;
+const DASH = ` &mdash; `;
+const ELLOPSIS = `...`
+
 const createTripInfoTemplate = (trips) => {
 
-  const tripInfo = (trips.length <= 3) ? trips.map((trip) => trip.destination).join(` &mdash; `) : `${trips[0].destination} &mdash; ...  &mdash; ${trips[trips.length - 1].destination}`;
+  const tripInfo = (trips.length <= 3) ? trips.map((trip) => trip.destination).join(DASH) : `${trips[0].destination} ${DASH} ${ELLOPSIS}  ${DASH} ${trips[trips.length - 1].destination}`;
 
-  const startTripDate = dayjs(trips[0].startDate).format(`MMM DD`);
-  const endTripDate = dayjs(trips[trips.length - 1].endDate).format(`MMM DD`);
+  const startTripDate = dayjs(trips[0].startDate).format(EVENT_DATE_FORMAT);
+  const endTripDate = dayjs(trips[trips.length - 1].endDate).format(EVENT_DATE_FORMAT);
 
   return `<section class="trip-main__trip-info  trip-info">
 <div class="trip-info__main">

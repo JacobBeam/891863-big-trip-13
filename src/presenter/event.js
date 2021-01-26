@@ -6,6 +6,13 @@ import {UserAction, UpdateType} from "../utils/utils.js";
 import {isOnline} from "../utils/utils.js";
 import {toast} from "../utils/toast/toast.js";
 
+const KEYDOWN_EVENT = `keydown`;
+const TOAST_ERROR_SAVE = `You can't save point offline`;
+const TOAST_ERROR_DELETE = `You can't delete point offline`
+const TOAST_ERROR_EDIT = `You can't edit point offline`
+const KEY_ESCAPE = `Escape`;
+const KEY_ESC = `Esc`;
+
 const Mode = {
   DEFAULT: `DEFAULT`,
   EDITING: `EDITING`
@@ -26,12 +33,12 @@ export default class Event {
     this._eventEditComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._handlerEditClick = this._handlerEditClick.bind(this);
-    this._handlerFormSubmit = this._handlerFormSubmit.bind(this);
-    this._handlerEditCloseClick = this._handlerEditCloseClick.bind(this);
-    this._handlerEscKeyDown = this._handlerEscKeyDown.bind(this);
-    this._handlerFavoriteClick = this._handlerFavoriteClick.bind(this);
-    this._handlerDeleteClick = this._handlerDeleteClick.bind(this);
+    this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleEditCloseClick = this._handleEditCloseClick.bind(this);
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(trip, allDestinations, allOffers) {
@@ -48,11 +55,11 @@ export default class Event {
     //this._eventEditComponent = new EventEditView(this._trip, this._dstinations, this._offers, isAdded);
     this._eventEditComponent = new EventFormView(this._trip, this._dstinations, this._offers, isAdded);
 
-    this._eventComponent.setEditClickHandler(this._handlerEditClick);
-    this._eventEditComponent.setFormSubmitHandler(this._handlerFormSubmit);
-    this._eventEditComponent.setEditCloseClickHandler(this._handlerEditCloseClick);
-    this._eventComponent.setFavoriteClickHandler(this._handlerFavoriteClick);
-    this._eventEditComponent.setDeleteClickHandler(this._handlerDeleteClick);
+    this._eventComponent.setEditClickHandler(this._handleEditClick);
+    this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._eventEditComponent.setEditCloseClickHandler(this._handleEditCloseClick);
+    this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._eventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._eventsListComponent, this._eventComponent, RenderPosition.BEFOREEND);
@@ -116,61 +123,61 @@ export default class Event {
 
   _replaceCardToForm() {
     replace(this._eventEditComponent, this._eventComponent);
-    document.addEventListener(`keydown`, this._handlerEscKeyDown);
+    document.addEventListener(KEYDOWN_EVENT, this._handleEscKeyDown);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceFormToCard() {
     replace(this._eventComponent, this._eventEditComponent);
-    document.removeEventListener(`keydown`, this._handlerEscKeyDown);
+    document.removeEventListener(KEYDOWN_EVENT, this._handleEscKeyDown);
     this._mode = Mode.DEFAULT;
   }
 
-  _handlerEscKeyDown(evt) {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
+  _handleEscKeyDown(evt) {
+    if (evt.key === KEY_ESCAPE || evt.key === KEY_ESC) {
       evt.preventDefault();
       this._eventEditComponent.reset(this._trip);
       this._replaceFormToCard();
     }
   }
 
-  _handlerEditClick() {
+  _handleEditClick() {
     if (!isOnline()) {
       this._eventComponent.shake();
-      toast(`You can't edit point offline`);
+      toast(TOAST_ERROR_EDIT);
       return;
     }
 
     this._replaceCardToForm();
   }
 
-  _handlerFormSubmit(trip) {
+  _handleFormSubmit(trip) {
     if (!isOnline()) {
       this._eventEditComponent.shake();
-      toast(`You can't save point offline`);
+      toast(TOAST_ERROR_SAVE);
       return;
     }
 
     this._changeData(UserAction.UPDATE_POINT, UpdateType.MINOR, trip);
   }
 
-  _handlerDeleteClick(trip) {
+  _handleDeleteClick(trip) {
     if (!isOnline()) {
       this._eventEditComponent.shake();
-      toast(`You can't delete point offline`);
+      toast(TOAST_ERROR_DELETE);
       return;
     }
 
     this._changeData(UserAction.DELETE_POINT, UpdateType.MINOR, trip);
   }
 
-  _handlerEditCloseClick() {
+  _handleEditCloseClick() {
     this._eventEditComponent.reset(this._trip);
     this._replaceFormToCard();
   }
 
-  _handlerFavoriteClick() {
+  _handleFavoriteClick() {
     this._changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,

@@ -1,12 +1,19 @@
 import dayjs from "dayjs";
 
+const DURATION_DAY = `day`;
+const DURATION_HOUR = `hour`;
+const DURATION_MINUTE = `minute`;
+const DAY_FORMAT = `D`;
+const HOUR_FORMAT = `H`;
+const MINUTE_FORMAT = `M`;
+const TWO_DIGIT_FORMAT_MIN_VALUE = 0;
+const TWO_DIGIT_FORMAT_MAX_VALUE = 10;
+const TWO_DIGIT_FORMAT = `0`;
+
 const formatDuration = (duration) =>{
-  return (duration >= 0 && duration < 10) ? `0` + duration : duration;
+  return (duration >= TWO_DIGIT_FORMAT_MIN_VALUE && duration < TWO_DIGIT_FORMAT_MAX_VALUE) ? TWO_DIGIT_FORMAT + duration : duration;
 }
 
-export const isOnline = () => {
-  return window.navigator.onLine;
-};
 
 export const SortType = {
   DATE_DEFAULT: `date`,
@@ -39,6 +46,10 @@ export const MenuItem = {
   STATISTICS: `STATISTICS`
 };
 
+export const isOnline = () => {
+  return window.navigator.onLine;
+};
+
 export const getRandomInteger = (a = 0, b = 1) => {
   const lowerValue = Math.ceil(Math.min(a, b));
   const upperValue = Math.floor(Math.max(a, b));
@@ -57,18 +68,18 @@ export const shuffle = (array) => {
 
 export const findEventDuration = (start, end) => {
 
-  let durationInDay = dayjs(end).diff(dayjs(start), `day`)
-  end = dayjs(end).subtract(durationInDay, `day`)
-  let durationInHours = dayjs(end).diff(dayjs(start), `hour`);
-  end = dayjs(end).subtract(durationInHours, `hour`)
-  let durationInMinutes = dayjs(end).diff(dayjs(start), `minute`);
- durationInMinutes = formatDuration(durationInMinutes) + `M`;
+  let durationInDay = dayjs(end).diff(dayjs(start), DURATION_DAY)
+  end = dayjs(end).subtract(durationInDay, DURATION_DAY)
+  let durationInHours = dayjs(end).diff(dayjs(start), DURATION_HOUR);
+  end = dayjs(end).subtract(durationInHours, DURATION_HOUR)
+  let durationInMinutes = dayjs(end).diff(dayjs(start), DURATION_MINUTE);
+ durationInMinutes = formatDuration(durationInMinutes) + MINUTE_FORMAT;
 
  if ((durationInDay > 0) || ( durationInHours > 0)) {
-    durationInHours =formatDuration(durationInHours) + `H`;
+    durationInHours =formatDuration(durationInHours) + HOUR_FORMAT;
   } else { durationInHours = `` };
 
- durationInDay = (durationInDay > 0) ? formatDuration(durationInDay) + `D` : ``;
+ durationInDay = (durationInDay > 0) ? formatDuration(durationInDay) + DAY_FORMAT : ``;
 
   return `${durationInDay} ${durationInHours} ${durationInMinutes}`
 

@@ -1,5 +1,8 @@
 import Abstract from "../view/abstract.js";
 
+const ERROR_REPLACE = `Can't replace unexisting elements`;
+const ERROR_REMOVE = `Can remove only components`;
+
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
@@ -60,7 +63,7 @@ export const replace = (newChild, oldChild) => {
   const parent = oldChild.parentElement;
 
   if (parent === null || oldChild === null || newChild === null) {
-    throw new Error(`Can't replace unexisting elements`);
+    throw new Error(ERROR_REPLACE);
   }
 
   parent.replaceChild(newChild, oldChild);
@@ -73,7 +76,7 @@ export const remove = (component) => {
   }
 
   if (!(component instanceof Abstract)) {
-    throw new Error(`Can remove only components`);
+    throw new Error(ERROR_REMOVE);
   }
 
   component.getElement().remove();

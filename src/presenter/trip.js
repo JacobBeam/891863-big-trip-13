@@ -29,23 +29,23 @@ export default class Board {
     this._eventsListComponent = new EventsListView();
     this._loadingComponent = new LoadingView();
 
-    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this._handlerViewAction);
+    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this.__handleViewAction);
 
-    this._handlerViewAction = this._handlerViewAction.bind(this);
-    this._handlerModelEvent = this._handlerModelEvent.bind(this);
-    this._handlerModeChange = this._handlerModeChange.bind(this);
-    this._handlerSortTypeChange = this._handlerSortTypeChange.bind(this);
+    this.__handleViewAction = this.__handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
 
-    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this._handlerViewAction);
+    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this.__handleViewAction);
 
   }
 
   init() {
     this._renderBoard();
 
-    this._pointsModel.addObserver(this._handlerModelEvent);
-    this._filterModel.addObserver(this._handlerModelEvent);
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
   }
 
@@ -82,7 +82,7 @@ export default class Board {
     this._eventNewPresenter.init(callback, destinations, offers);
   }
 
-  _handlerSortTypeChange(sortType) {
+  _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
     }
@@ -92,7 +92,7 @@ export default class Board {
     this._renderBoard();
   }
 
-  _handlerViewAction(actionType, updateType, update) {
+  __handleViewAction(actionType, updateType, update) {
     // Здесь будем вызывать обновление модели.
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
@@ -135,7 +135,7 @@ export default class Board {
     }
   }
 
-  _handlerModelEvent(updateType) {
+  _handleModelEvent(updateType) {
 
     // В зависимости от типа изменений решаем, что делать:
 
@@ -158,7 +158,7 @@ export default class Board {
     }
   }
 
-  _handlerModeChange() {
+  _handleModeChange() {
     this._eventNewPresenter.destroy();
     Object
     .values(this._eventPresenter)
@@ -177,7 +177,7 @@ export default class Board {
     }
 
     this._sortComponent = new SortView(this._currentSortType);
-    this._sortComponent.setSortTypeChangeHandler(this._handlerSortTypeChange);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
     render(this._boardContainer, this._sortComponent, RenderPosition.BEFOREEND);
   }
@@ -189,7 +189,7 @@ export default class Board {
   _renderEvent(trip) {
     const destinations = this._getAllDestinations();
     const offers = this._getAllOffers();
-    const eventPresenter = new EventPresenter(this._eventsListComponent, this._handlerViewAction, this._handlerModeChange);
+    const eventPresenter = new EventPresenter(this._eventsListComponent, this.__handleViewAction, this._handleModeChange);
 
     eventPresenter.init(trip, destinations, offers);
     this._eventPresenter[trip.id] = eventPresenter;
@@ -258,8 +258,8 @@ export default class Board {
 
     remove(this._eventsListComponent);
 
-    this._pointsModel.removeObserver(this._handlerModelEvent);
-    this._filterModel.removeObserver(this._handlerModelEvent);
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
 
   }
 }

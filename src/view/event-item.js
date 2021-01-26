@@ -3,6 +3,12 @@ import {findEventDuration} from "../utils/utils.js";
 import AbstractView from "./abstract.js";
 
 
+const EVENT_DATE_FORMAT = `MMM DD`;
+const EVENT_TIME_FORMAT = `HH:mm`;
+const CLICK_EVENT = `click`;
+const SELECTOR_EVENT_ROLLUP_BTN = `.event__rollup-btn`;
+const SELECTOR_EVENT_FAVORITE_BTN = `.event__favorite-btn`;
+
 const createTripItemTemplate = (trip) => {
 
   const {eventType,
@@ -13,9 +19,9 @@ const createTripItemTemplate = (trip) => {
     eventPrice,
     isFavorite} = trip;
 
-  const eventDate = dayjs(startDate).format(`MMM DD`);
-  const eventStartTime = dayjs(startDate).format(`HH:mm`);
-  const eventEndTime = dayjs(endDate).format(`HH:mm`);
+  const eventDate = dayjs(startDate).format(EVENT_DATE_FORMAT);
+  const eventStartTime = dayjs(startDate).format(EVENT_TIME_FORMAT);
+  const eventEndTime = dayjs(endDate).format(EVENT_TIME_FORMAT);
   const eventDuration = findEventDuration(startDate, endDate);
 
   const createTripOffersTemplate = (data) => {
@@ -90,7 +96,7 @@ export default class EventItem extends AbstractView {
 
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+    this.getElement().querySelector(SELECTOR_EVENT_ROLLUP_BTN).addEventListener(CLICK_EVENT, this._editClickHandler);
   }
 
   _favoriteClickHandler(evt) {
@@ -100,6 +106,6 @@ export default class EventItem extends AbstractView {
 
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
-    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
+    this.getElement().querySelector(SELECTOR_EVENT_FAVORITE_BTN).addEventListener(CLICK_EVENT, this._favoriteClickHandler);
   }
 }

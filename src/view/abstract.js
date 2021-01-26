@@ -1,11 +1,15 @@
 import {createElement} from "../utils/render.js";
 
+const NAME_ANIMATION = `shake`;
+const SHAKE_ANIMATION_TIME = `s`;
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const SHAKE_ANIMATION_DURATION = 0.6;
+const ERROR_INSTANTIATE_ABSTRACT = `Can't instantiate Abstract, only concrete one.`;
+const ERROR_IMPLEMENT = `Abstract method not implemented: getTemplate`
 export default class Abstract {
   constructor() {
     if (new.target === Abstract) {
-      throw new Error(`Can't instantiate Abstract, only concrete one.`);
+      throw new Error(ERROR_INSTANTIATE_ABSTRACT);
     }
 
     this._element = null;
@@ -13,7 +17,7 @@ export default class Abstract {
   }
 
   getTemplate() {
-    throw new Error(`Abstract method not implemented: getTemplate`);
+    throw new Error(ERROR_IMPLEMENT);
   }
 
   getElement() {
@@ -29,7 +33,7 @@ export default class Abstract {
   }
 
   shake(callback) {
-    this.getElement().style.animation = `shake ${SHAKE_ANIMATION_DURATION}s`;
+    this.getElement().style.animation = `${NAME_ANIMATION} ${SHAKE_ANIMATION_DURATION}${SHAKE_ANIMATION_TIME}`;
     setTimeout(() => {
       this.getElement().style.animation = ``;
       if (callback) {

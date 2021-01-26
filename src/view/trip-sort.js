@@ -1,6 +1,8 @@
 import AbstractView from "./abstract.js";
 import {SortType} from "../utils/utils.js";
 
+const CHANGE_EVENT = `change`;
+
 const createSortTemplate = (currentSortType) => `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   <div class="trip-sort__item  trip-sort__item--day">
     <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" data-sort-type="${SortType.DATE_DEFAULT}" ${currentSortType === SortType.DATE_DEFAULT ? `checked` : ``}>
@@ -47,6 +49,6 @@ export default class TripSort extends AbstractView {
 
   setSortTypeChangeHandler(callback) {
     this._callback.sortTypeChange = callback;
-    this.getElement().addEventListener(`change`, this._sortTypeChangeHandler);
+    this.getElement().addEventListener(CHANGE_EVENT, this._sortTypeChangeHandler);
   }
 }

@@ -7,6 +7,24 @@ import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
+const CHANGE_EVENT = `change`;
+const INPUT_EVENT = `input`;
+const SUBMIT_EVENT = `submit`;
+const CLICK_EVENT = `click`;
+const DATE_VALUE_FORMAT = `DD/MM/YY HH:mm`;
+const DATEPICKER_DATE_FORMAT = `d/m/Y H:i`;
+const ATTRIBUTE_DISABLED = `disabled`;
+const VALUE_TRUE = `true`;
+const SELECTOR_START_TIME = `#event-start-time-1`;
+const SELECTOR_END_TIME = `#event-end-time-1`;
+const SELECTOR_EVENT_TYPE_LIST = `.event__type-list`;
+const SELECTOR_EVENT_INPUT_DESTINATION= `.event__input--destination`;
+const SELECTOR_EVENT_INPUT_PRICE = `.event__input--price`;
+const SELECTOR_EVENT_AVAILABLE_OFFERS = `.event__available-offers`;
+const SELECTOR_EVENT_SAVE_BTN = `.event__save-btn`;
+const SELECTOR_FORM = `form`;
+const SELECTOR_EVENT_ROLLUP_BTN = `.event__rollup-btn`;
+const SELECTOR_EVENT_RESET_BTN = `.event__reset-btn`;
 //const BLANK_EVENT = {
 //  eventType: TYPES[0].toLowerCase(),
 //  destination: ``,
@@ -37,8 +55,8 @@ const createEditTripTemplate = (data, allDestinations, isAdded) => {
     isDeleting
   } = data;
 
-  const startDateValue = dayjs(startDate).format(`DD/MM/YY HH:mm`);
-  const endDateValue = dayjs(endDate).format(`DD/MM/YY HH:mm`);
+  const startDateValue = dayjs(startDate).format(DATE_VALUE_FORMAT);
+  const endDateValue = dayjs(endDate).format(DATE_VALUE_FORMAT);
 
   const isSubmitDisabled = (startDate > endDate);
 
@@ -65,7 +83,7 @@ ${offersByType.map(({title, price}, index) => {
 </section>` : ` `;
   };
 
-  const offerstemplate = createOffersTemplate(offers, offersList, isOffers);
+  const offersTemplate = createOffersTemplate(offers, offersList, isOffers);
 
 
   const createDestinationInfoTemplate = (info, isInfo) => {
@@ -116,7 +134,7 @@ ${types.map((type) => `<div class="event__type-item">
       </div>`;
   };
 
-  const typesEventListtemplate = createTypesEventList(TYPES, eventType);
+  const typesEventListTemplate = createTypesEventList(TYPES, eventType);
 
 
   return `<li class="trip-events__item">
@@ -128,7 +146,7 @@ ${types.map((type) => `<div class="event__type-item">
         <img class="event__type-icon" width="17" height="17" src="./img/icons/${eventType.toLowerCase()}.png" alt="Event type icon">
       </label>
       <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
-${typesEventListtemplate}
+${typesEventListTemplate}
     </div>
 
     <div class="event__field-group  event__field-group--destination">
@@ -167,7 +185,7 @@ ${typesEventListtemplate}
 
   </header>
   <section class="event__details">
- ${offerstemplate}
+ ${offersTemplate}
 
 ${destinationTemplate}
 </section>
@@ -251,10 +269,10 @@ getTemplate() {
     }
 
     this._datepickerStart = flatpickr(
-        this.getElement().querySelector(`#event-start-time-1`),
+        this.getElement().querySelector(SELECTOR_START_TIME),
         {
           enableTime: true,
-          dateFormat: `d/m/Y H:i`,
+          dateFormat: DATEPICKER_DATE_FORMAT,
           defaultDate: this._data.startDate,
           onChange: this._startDateChangeHandler
         }
@@ -283,11 +301,11 @@ getTemplate() {
     }
 
     this._datepickerEnd = flatpickr(
-        this.getElement().querySelector(`#event-end-time-1`),
+        this.getElement().querySelector(SELECTOR_END_TIME),
         {
           enableTime: true,
           minDate: dayjs(this._data.startDate).valueOf(),
-          dateFormat: `d/m/Y H:i`,
+          dateFormat: DATEPICKER_DATE_FORMAT,
           defaultDate: this._data.endDate,
           onChange: this._endDateChangeHandler
         }
@@ -302,21 +320,21 @@ getTemplate() {
 
   _setInnerHandlers() {
     this.getElement()
-      .querySelector(`.event__type-list`)
-      .addEventListener(`change`, this._eventTypeChangeHandler);
+      .querySelector(SELECTOR_EVENT_TYPE_LIST)
+      .addEventListener(CHANGE_EVENT, this._eventTypeChangeHandler);
 
     this.getElement()
-      .querySelector(`.event__input--destination`)
-      .addEventListener(`change`, this._eventDestinationChangeHandler);
+      .querySelector(SELECTOR_EVENT_INPUT_DESTINATION)
+      .addEventListener(CHANGE_EVENT, this._eventDestinationChangeHandler);
 
     this.getElement()
-      .querySelector(`.event__input--price`)
-      .addEventListener(`input`, this._eventPriceInputHandler);
+      .querySelector(SELECTOR_EVENT_INPUT_PRICE)
+      .addEventListener(INPUT_EVENT, this._eventPriceInputHandler);
 
     if (this._data.isOffers) {
       this.getElement()
-        .querySelector(`.event__available-offers`)
-        .addEventListener(`change`, this._offersChangeHandler);
+        .querySelector(SELECTOR_EVENT_AVAILABLE_OFFERS)
+        .addEventListener(CHANGE_EVENT, this._offersChangeHandler);
     }
   }
 
@@ -370,7 +388,7 @@ getTemplate() {
         isDestinationPhoto: newDestination.pictures.length !== 0
       });
     } else {
-      this.getElement().querySelector(`.event__save-btn`).setAttribute(`disabled`, `true`);
+      this.getElement().querySelector(SELECTOR_EVENT_SAVE_BTN).setAttribute(ATTRIBUTE_DISABLED, VALUE_TRUE);
     }
   }
 
@@ -381,7 +399,7 @@ getTemplate() {
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
+    this.getElement().querySelector(SELECTOR_FORM).addEventListener(SUBMIT_EVENT, this._formSubmitHandler);
   }
 
   _editCloseClickHandler(evt) {
@@ -391,7 +409,7 @@ getTemplate() {
 
   setEditCloseClickHandler(callback) {
     this._callback.editCloseClick = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editCloseClickHandler);
+    this.getElement().querySelector(SELECTOR_EVENT_ROLLUP_BTN).addEventListener(CLICK_EVENT, this._editCloseClickHandler);
   }
 
   _formDeleteClickHandler(evt) {
@@ -401,7 +419,7 @@ getTemplate() {
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
-    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
+    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formDeleteClickHandler);
   }
 
   _formCancelClickHandler(evt) {
@@ -411,7 +429,7 @@ getTemplate() {
 
   setCancelClickHandler(callback) {
     this._callback.cancelClick = callback;
-    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formCancelClickHandler);
+    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formCancelClickHandler);
   }
 
 

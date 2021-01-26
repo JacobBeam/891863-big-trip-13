@@ -1,4 +1,7 @@
 import Observer from "../utils/observer.js";
+
+const UPDATE_ERROR = `Can't update unexisting point`;
+const DELETE_ERROR = `Can't delete unexisting point`;
 export default class Points extends Observer {
   constructor() {
     super();
@@ -37,7 +40,7 @@ export default class Points extends Observer {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error(`Can't update unexisting task`);
+      throw new Error(UPDATE_ERROR);
     }
 
     this._points = [
@@ -62,7 +65,7 @@ export default class Points extends Observer {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error(`Can't delete unexisting task`);
+      throw new Error(DELETE_ERROR);
     }
 
     this._points = [

@@ -1,6 +1,8 @@
 import AbstractView from "./abstract.js";
 import {FilterType} from "../utils/utils.js";
 
+const CHANGE_EVENT = `change`;
+
 const createFilterTemplate = (currentFilterType, points) => {
 
   const isFuturePoints = (points.slice().filter((point) => point.startDate >= new Date()).length) > 0;
@@ -47,6 +49,6 @@ export default class Filter extends AbstractView {
 
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
-    this.getElement().addEventListener(`change`, this._filterTypeChangeHandler);
+    this.getElement().addEventListener(CHANGE_EVENT, this._filterTypeChangeHandler);
   }
 }
