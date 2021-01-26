@@ -3,7 +3,7 @@ import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import StatisticsView from "./view/statistics.js";
 import {render, RenderPosition, remove} from "./utils/render.js";
-import BoardPresenter from "./presenter/trip.js";
+import TripPresenter from "./presenter/trip.js";
 import FilterPresenter from "./presenter/filter.js";
 import {MenuItem, UpdateType, isOnline} from "./utils/utils.js";
 import Api from "./api/api.js";
@@ -48,15 +48,15 @@ const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
 
-      boardPresenter.destroy();
+      tripPresenter.destroy();
       remove(statisticsComponent);
-      boardPresenter.init();
+      tripPresenter.init();
       pointAddButton.disabled = false;
       break;
 
     case MenuItem.STATISTICS:
       remove(statisticsComponent);
-      boardPresenter.destroy({saveTripInfo: true});
+      tripPresenter.destroy({saveTripInfo: true});
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
       render(eventsContentElement, statisticsComponent, RenderPosition.AFTER);
       pointAddButton.disabled = true;
@@ -77,9 +77,9 @@ const filterModel = new FilterModel();
 const siteMenuComponent = new MenuView();
 
 const filterPresenter = new FilterPresenter(menuElement, pointsModel, filterModel);
-const boardPresenter = new BoardPresenter(eventsContentElement, tripInfoElement, pointsModel, filterModel, apiWithProvider);
+const tripPresenter = new TripPresenter(eventsContentElement, tripInfoElement, pointsModel, filterModel, apiWithProvider);
 
-boardPresenter.init();
+tripPresenter.init();
 
 
 Promise.all([
@@ -110,7 +110,7 @@ pointAddButton.addEventListener(CLICK_EVENT, (evt) => {
     return;
   }
 
-  boardPresenter.createPoint(handlePointNewFormClose);
+  tripPresenter.createPoint(handlePointNewFormClose);
   evt.target.disabled = true;
 });
 

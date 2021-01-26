@@ -7,7 +7,7 @@ import TripInfoPresenter from "./trip-info.js";
 import EventNewPresenter from "./event-new.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {filter, sortDate, sortPrice, sortDuration, SortType, UpdateType, UserAction, FilterType} from "../utils/utils.js";
-export default class Board {
+export default class Trip {
 
   constructor(boardContainer, tripInfoElement, pointsModel, filterModel, api) {
     this._boardContainer = boardContainer;

@@ -162,7 +162,7 @@ export const findEventDuration = (start, end) => {
 };
 
 export const sortDate = (a, b) => {
-  return a.startDate - b.startDate;
+  return b.startDate - a.startDate;
 };
 
 export const sortPrice = (a, b) => {

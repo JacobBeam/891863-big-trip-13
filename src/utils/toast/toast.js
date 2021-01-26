@@ -9,7 +9,7 @@ const toastContainer = document.createElement(DIV_ELEMENT);
 toastContainer.classList.add(CLASS_TOAST_CONTAINER);
 document.body.append(toastContainer);
 
-const toast = (message) => {
+export const toast = (message) => {
   const toastItem = document.createElement(DIV_ELEMENT);
   toastItem.textContent = message;
   toastItem.classList.add(CLASS_TOAST_ITEM);
@@ -22,5 +22,3 @@ const toast = (message) => {
   }, SHOW_TIME);
 
 };
-
-export {toast};
