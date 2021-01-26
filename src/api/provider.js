@@ -1,6 +1,9 @@
 import PointsModel from "../model/points.js";
 import {isOnline} from "../utils/utils.js";
 
+const ADD_ERROR = `Add point failed`;
+const DELETE_ERROR = `Delete point failed`;
+const SYNC_ERROR =`Sync data failed`;
 
 const StoreNameStructure = {
   POINTS: `POINTS`,
@@ -92,7 +95,7 @@ export default class Provider {
         });
     }
 
-    return Promise.reject(new Error(`Add point failed`));
+    return Promise.reject(new Error(ADD_ERROR ));
   }
 
   deletePoint(point) {
@@ -102,7 +105,7 @@ export default class Provider {
         .then(() => this._store.removeItem(StoreNameStructure.POINTS, point.id));
     }
 
-    return Promise.reject(new Error(`Delete point failed`));
+    return Promise.reject(new Error(DELETE_ERROR));
 
   }
 
@@ -159,7 +162,7 @@ export default class Provider {
         });
     }
 
-    return Promise.reject(new Error(`Sync data failed`));
+    return Promise.reject(new Error(SYNC_ERROR));
   }
 
 

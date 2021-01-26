@@ -7,7 +7,18 @@ import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-const createEditTripTemplate = (data, allDestinations) => {
+//const BLANK_EVENT = {
+//  eventType: TYPES[0].toLowerCase(),
+//  destination: ``,
+//  offers: [],
+//  startDate: (new Date()),
+//  endDate: (new Date()),
+//  destinationInfo: ``,
+//  destinationPhoto: [],
+//  eventPrice: ``,
+//  isFavorite: false};
+
+const createEditTripTemplate = (data, allDestinations, isAdded) => {
 
   const {eventType,
     destination,
@@ -38,11 +49,7 @@ const createEditTripTemplate = (data, allDestinations) => {
     <div class="event__available-offers">
 
 ${offersByType.map(({title, price}, index) => {
-  // Перебирать все значения возможных предложений, на каждом шаге искать в предложениях для точки соответствие текущего предложения по title и price, если соответствует, то ставить флаг в checked
-  //const isChecked = offersData.find((offer) => offer.title === title && offer.price === price) ? true : false;
-
     const findSomeOffer = (offer)=> offer.title === title && offer.price === price;
-
     const isChecked = offersData.some(findSomeOffer)
 
     return `<div class="event__offer-selector">
@@ -128,7 +135,7 @@ ${typesEventListtemplate}
       <label class="event__label  event__type-output" for="event-destination-1">
       ${eventType}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destination)}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destination)}" list="destination-list-1" required>
       <datalist id="destination-list-1">
       ${allDestinations.map((city)=>`<option value="${he.encode(city.name)}"></option>`).join(``)}
 
@@ -148,14 +155,16 @@ ${typesEventListtemplate}
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="number" step="1" min="0" name="event-price" value="${eventPrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" step="1" min="0" name="event-price" value="${eventPrice}" required>
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled || isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
-    <button class="event__reset-btn" type="reset"> ${isDeleting ? `Deleting...` : `Delete`}</button>
-    <button class="event__rollup-btn" type="button">
+    <button class="event__reset-btn" type="reset"> ${isAdded ? `Cancel` : `${isDeleting ? `Deleting...` : `Delete`}`}</button>
+    ${isAdded ? `` : `<button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
-    </button>
+    </button>`}
+
+
   </header>
   <section class="event__details">
  ${offerstemplate}
@@ -165,26 +174,27 @@ ${destinationTemplate}
 
 </form></li>`;
 };
-export default class EventEdit extends SmartView {
+export default class EventForm extends SmartView {
 
-  constructor(trip, destinations, offers) {
+  constructor(trip, destinations, offers, isAdded) {
     super();
     this._destinations = destinations.slice();
     this._offers = offers;
-    this._data = EventEdit.parseEventToData(trip, this._offers);
+    this._data = EventForm.parseEventToData(trip, this._offers);
+    this._isAdded = isAdded;
     this._datepickerStart = null;
     this._datepickerEnd = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editCloseClickHandler = this._editCloseClickHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._formCancelClickHandler = this._formCancelClickHandler.bind(this);
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
     this._eventPriceInputHandler = this._eventPriceInputHandler.bind(this);
     this._offersChangeHandler = this._offersChangeHandler.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
-    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
-
 
     this._setInnerHandlers();
     this._setStartDatepicker();
@@ -192,7 +202,7 @@ export default class EventEdit extends SmartView {
   }
 
 getTemplate() {
-    return createEditTripTemplate(this._data, this._destinations);
+    return createEditTripTemplate(this._data, this._destinations, this._isAdded);
   }
 
   removeElement() {
@@ -216,7 +226,7 @@ getTemplate() {
 
 
   reset(trip) {
-    this.updateData(EventEdit.parseDataToEvent(trip));
+    this.updateData(EventForm.parseDataToEvent(trip));
   }
 
 
@@ -225,8 +235,11 @@ getTemplate() {
     this._setStartDatepicker();
     this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
-    this.setEditCloseClickHandler(this._callback.editCloseClick);
-    this.setDeleteClickHandler(this._callback.deleteClick)
+
+    if (this._isAdded) {
+      this.setCancelClickHandler(this._callback.cancelClick);
+    } else {this.setEditCloseClickHandler(this._callback.editCloseClick);
+    this.setDeleteClickHandler(this._callback.deleteClick)}
   }
 
   _setStartDatepicker() {
@@ -363,7 +376,7 @@ getTemplate() {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
+    this._callback.formSubmit(EventForm.parseDataToEvent(this._data));
   }
 
   setFormSubmitHandler(callback) {
@@ -383,12 +396,22 @@ getTemplate() {
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteClick(EventEdit.parseDataToEvent(this._data));
+    this._callback.deleteClick(EventForm.parseDataToEvent(this._data));
   }
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
+  }
+
+  _formCancelClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.cancelClick();
+  }
+
+  setCancelClickHandler(callback) {
+    this._callback.cancelClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formCancelClickHandler);
   }
 
 

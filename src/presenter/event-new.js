@@ -1,7 +1,9 @@
 import EventNewView from "../view/event-new.js";
+import EventFormView from "../view/event-form.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../utils/utils.js";
 import {isOnline} from "../utils/utils.js";
+import {BLANK_EVENT} from "../utils/const.js";
 import {toast} from "../utils/toast/toast.js";
 
 export default class EventNew {
@@ -25,7 +27,11 @@ export default class EventNew {
       return;
     }
 
-    this._eventNewComponent = new EventNewView(allDestinations, allOffers);
+    const isAdded = true;
+
+    //this._eventNewComponent = new EventNewView(allDestinations, allOffers, isAdded);
+    this._eventNewComponent = new EventFormView(BLANK_EVENT,allDestinations, allOffers, isAdded);
+  //this._eventNewComponent.setDeletelClickHandler(this._handlerCancelClick);
     this._eventNewComponent.setCancelClickHandler(this._handlerCancelClick);
     this._eventNewComponent.setFormSubmitHandler(this._handlerFormSubmit);
 

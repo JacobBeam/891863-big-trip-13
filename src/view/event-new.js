@@ -45,11 +45,7 @@ const createNewTripTemplate = (trip = BLANK_EVENT, allDestinations) => {
     <div class="event__available-offers">
 
     ${offersByType.map(({title, price}, index) => {
-    // Перебирать все значения возможных предложений, на каждом шаге искать в предложениях для точки соответствие текущего предложения по title и price, если соответствует, то ставить флаг в checked
-    //const isChecked = offersData.find((offer) => offer.title === title && offer.price === price) ? true : false;
-
     const findSomeOffer = (offer)=> offer.title === title && offer.price === price;
-
     const isChecked = offersData.some(findSomeOffer)
 
     return `<div class="event__offer-selector">
@@ -140,7 +136,6 @@ ${typesEventListtemplate}
       <datalist id="destination-list-1">
       ${allDestinations.map((city)=>`<option value="${he.encode(city.name)}"></option>`).join(``)}
 
-
       </datalist>
     </div>
 
@@ -164,6 +159,8 @@ ${typesEventListtemplate}
     <button class="event__reset-btn" type="reset">Cancel</button>
           <span class="visually-hidden">Open event</span>
     </button>
+
+
   </header>
   <section class="event__details">
  ${offerstemplate}
@@ -186,7 +183,6 @@ export default class EventNew extends SmartView {
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formCancelClickHandler = this._formCancelClickHandler.bind(this);
-
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
     this._eventPriceInputHandler = this._eventPriceInputHandler.bind(this);
@@ -200,7 +196,7 @@ export default class EventNew extends SmartView {
   }
 
   getTemplate() {
-    return createNewTripTemplate(this._data, this._destinations, this._offers);
+    return createNewTripTemplate(this._data, this._destinations);
   }
 
   removeElement() {
@@ -328,6 +324,7 @@ export default class EventNew extends SmartView {
 
 
   _eventPriceInputHandler(evt) {
+    evt.preventDefault();
     this.updateData({
       eventPrice: evt.target.value
     }, true);
