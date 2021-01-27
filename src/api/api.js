@@ -3,7 +3,7 @@ import PointsModel from "../model/points.js";
 const URL_POINTS = `points`;
 const URL_DESTINATIONS = `destinations`;
 const URL_OFFERS = `offers`;
-const URL_SYNC = `sync`;
+const URL_SYNC = `${URL_POINTS}/sync`;
 const HEADER_CONTENT_TYPE = `application/json`;
 const HEADER_AUTHORIZATION = `Authorization`;
 
@@ -73,7 +73,7 @@ export default class Api {
 
   sync(data) {
     return this._load({
-      url: `${URL_POINTS}/${URL_SYNC}`,
+      url: URL_SYNC,
       method: Method.POST,
       body: JSON.stringify(data),
       headers: new Headers({"Content-Type": HEADER_CONTENT_TYPE})

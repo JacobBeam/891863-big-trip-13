@@ -4,7 +4,8 @@ import {MenuItem} from "../utils/utils.js";
 const CLICK_EVENT = `click`;
 const ELEMENT_A = `A`;
 const CLASS_BTN_ACTIVE = `trip-tabs__btn--active`;
-const SELECTOR_DATA_BTN = `data-btn`;
+const SELECTOR_MENU_TABLE = `[data-btn=${MenuItem.TABLE}]`;
+const SELECTOR_MENU_STATISTICS = `[data-btn=${MenuItem.STATISTICS}]`;
 
 const createMenuTemplate = () => `<nav class="trip-controls__trip-tabs  trip-tabs">
   <h2 class="visually-hidden">Switch trip view</h2>
@@ -25,8 +26,8 @@ export default class Menu extends AbstractView {
 
 
   setMenuItem(menuItem) {
-    const menuTable = this.getElement().querySelector(`[${SELECTOR_DATA_BTN}=${MenuItem.TABLE}]`);
-    const menuStatistics = this.getElement().querySelector(`[${SELECTOR_DATA_BTN}=${MenuItem.STATISTICS}]`);
+    const menuTable = this.getElement().querySelector(SELECTOR_MENU_TABLE);
+    const menuStatistics = this.getElement().querySelector(SELECTOR_MENU_STATISTICS);
 
     switch (menuItem) {
       case MenuItem.TABLE:

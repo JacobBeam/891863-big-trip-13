@@ -21,6 +21,7 @@ const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 const CLICK_EVENT = `click`;
 const ONLINE_EVENT = `online`;
 const OFFLINE_EVENT = `offline`;
+const TITLE_OFFLINE = ` [offline]`;
 const LOAD_EVENT = `load`;
 const SW_FILE_NAME = `./sw.js`;
 const TOAST_ERROR_CREATE = `You can't create new point offline`;
@@ -119,7 +120,7 @@ window.addEventListener(LOAD_EVENT, () => {
 
 
 window.addEventListener(ONLINE_EVENT, () => {
-  document.title = document.title.replace(` [${OFFLINE_EVENT}]`, ``);
+  document.title = document.title.replace(TITLE_OFFLINE, ``);
 
   remove(networkErrorComponent);
 
@@ -129,7 +130,7 @@ window.addEventListener(ONLINE_EVENT, () => {
 });
 
 window.addEventListener(OFFLINE_EVENT, () => {
-  document.title += ` [${OFFLINE_EVENT}]`;
+  document.title += TITLE_OFFLINE;
 
   render(headerElement, networkErrorComponent, RenderPosition.AFTERBEGIN);
 });
