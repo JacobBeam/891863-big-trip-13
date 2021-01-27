@@ -25,6 +25,26 @@ export default class EventNew {
     this._handleCancelClick = this._handleCancelClick.bind(this);
   }
 
+  setSaving() {
+    this._eventNewComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._eventNewComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._eventNewComponent.shake(resetFormState);
+  }
+
+
   init(callback, allDestinations, allOffers) {
     this._destroyCallback = callback;
 
@@ -62,24 +82,7 @@ export default class EventNew {
     document.removeEventListener(KEYDOWN_EVENT, this._escKeyDownHandler);
   }
 
-  setSaving() {
-    this._eventNewComponent.updateData({
-      isDisabled: true,
-      isSaving: true
-    });
-  }
 
-  setAborting() {
-    const resetFormState = () => {
-      this._eventNewComponent.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false
-      });
-    };
-
-    this._eventNewComponent.shake(resetFormState);
-  }
 
   _handleFormSubmit(trip) {
 

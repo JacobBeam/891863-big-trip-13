@@ -219,11 +219,7 @@ export default class EventForm extends SmartView {
     this._setEndDatepicker();
   }
 
-getTemplate() {
-    return createEditTripTemplate(this._data, this._destinations, this._isAdded);
-  }
-
-  removeElement() {
+   removeElement() {
     super.removeElement();
 
     if (this._datepickerStart) {
@@ -241,12 +237,13 @@ getTemplate() {
     }
   }
 
-
+  getTemplate() {
+    return createEditTripTemplate(this._data, this._destinations, this._isAdded);
+  }
 
   reset(trip) {
     this.updateData(EventForm.parseDataToEvent(trip));
   }
-
 
   restoreHandlers() {
     this._setInnerHandlers();
@@ -258,6 +255,26 @@ getTemplate() {
       this.setCancelClickHandler(this._callback.cancelClick);
     } else {this.setEditCloseClickHandler(this._callback.editCloseClick);
     this.setDeleteClickHandler(this._callback.deleteClick)}
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(SELECTOR_FORM).addEventListener(SUBMIT_EVENT, this._formSubmitHandler);
+  }
+
+  setEditCloseClickHandler(callback) {
+    this._callback.editCloseClick = callback;
+    this.getElement().querySelector(SELECTOR_EVENT_ROLLUP_BTN).addEventListener(CLICK_EVENT, this._editCloseClickHandler);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formDeleteClickHandler);
+  }
+
+  setCancelClickHandler(callback) {
+    this._callback.cancelClick = callback;
+    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formCancelClickHandler);
   }
 
   _setStartDatepicker() {
@@ -374,8 +391,6 @@ getTemplate() {
   }
 
   _eventDestinationChangeHandler(evt) {
-
-
     const [newDestination] = this._destinations.filter((destination) => destination.name === evt.target.value);
     const destinationList = this._destinations.map((city) => city.name);
 
@@ -397,41 +412,25 @@ getTemplate() {
     this._callback.formSubmit(EventForm.parseDataToEvent(this._data));
   }
 
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().querySelector(SELECTOR_FORM).addEventListener(SUBMIT_EVENT, this._formSubmitHandler);
-  }
 
   _editCloseClickHandler(evt) {
     evt.preventDefault();
     this._callback.editCloseClick();
   }
 
-  setEditCloseClickHandler(callback) {
-    this._callback.editCloseClick = callback;
-    this.getElement().querySelector(SELECTOR_EVENT_ROLLUP_BTN).addEventListener(CLICK_EVENT, this._editCloseClickHandler);
-  }
+
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteClick(EventForm.parseDataToEvent(this._data));
   }
 
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formDeleteClickHandler);
-  }
+
 
   _formCancelClickHandler(evt) {
     evt.preventDefault();
     this._callback.cancelClick();
   }
-
-  setCancelClickHandler(callback) {
-    this._callback.cancelClick = callback;
-    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formCancelClickHandler);
-  }
-
 
   static parseEventToData(trip, allOffers) {
 

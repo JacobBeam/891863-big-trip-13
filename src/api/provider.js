@@ -68,6 +68,40 @@ export default class Provider {
 
   }
 
+  getDestinations() {
+
+    if (isOnline()) {
+      return this._api.getDestinations()
+        .then((destinations) => {
+          const items = createStoreStructure(destinations, StoreNameStructure.DESTINATION);
+          this._store.setItems(StoreNameStructure.DESTINATION, items);
+          return destinations;
+        });
+    }
+
+    const storeDestination = Object.values(this._store.getItems(StoreNameStructure.DESTINATION));
+
+    return Promise.resolve(storeDestination);
+
+  }
+
+  getOffers() {
+
+    if (isOnline()) {
+      return this._api.getOffers()
+        .then((offers) => {
+          const items = createStoreStructure(offers, StoreNameStructure.OFFERS);
+          this._store.setItems(StoreNameStructure.OFFERS, items);
+          return offers;
+        });
+    }
+
+    const storeOffers = Object.values(this._store.getItems(StoreNameStructure.OFFERS));
+
+    return Promise.resolve(storeOffers);
+
+  }
+
   updatePoint(point) {
 
     if (isOnline()) {
@@ -106,40 +140,6 @@ export default class Provider {
     }
 
     return Promise.reject(new Error(DELETE_ERROR));
-
-  }
-
-  getDestinations() {
-
-    if (isOnline()) {
-      return this._api.getDestinations()
-        .then((destinations) => {
-          const items = createStoreStructure(destinations, StoreNameStructure.DESTINATION);
-          this._store.setItems(StoreNameStructure.DESTINATION, items);
-          return destinations;
-        });
-    }
-
-    const storeDestination = Object.values(this._store.getItems(StoreNameStructure.DESTINATION));
-
-    return Promise.resolve(storeDestination);
-
-  }
-
-  getOffers() {
-
-    if (isOnline()) {
-      return this._api.getOffers()
-        .then((offers) => {
-          const items = createStoreStructure(offers, StoreNameStructure.OFFERS);
-          this._store.setItems(StoreNameStructure.OFFERS, items);
-          return offers;
-        });
-    }
-
-    const storeOffers = Object.values(this._store.getItems(StoreNameStructure.OFFERS));
-
-    return Promise.resolve(storeOffers);
 
   }
 

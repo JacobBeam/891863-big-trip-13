@@ -31,6 +31,15 @@ export default class Api {
       .then((points) => points.map(PointsModel.adaptToClient));
   }
 
+  getDestinations() {
+    return this._load({url: URL_DESTINATIONS})
+      .then(Api.toJSON);
+  }
+
+  getOffers() {
+    return this._load({url: URL_OFFERS})
+      .then(Api.toJSON);
+  }
 
   updatePoint(point) {
     return this._load({
@@ -60,16 +69,6 @@ export default class Api {
       url: `${URL_POINTS}/${point.id}`,
       method: Method.DELETE
     });
-  }
-
-  getDestinations() {
-    return this._load({url: URL_DESTINATIONS})
-      .then(Api.toJSON);
-  }
-
-  getOffers() {
-    return this._load({url: URL_OFFERS})
-      .then(Api.toJSON);
   }
 
   sync(data) {

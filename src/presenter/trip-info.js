@@ -21,12 +21,12 @@ export default class TripInfo {
     render(this._tripInfoComponent, this._tripTotalPriceComponent, RenderPosition.BEFOREEND);
   }
 
-  _getPoints() {
-    return this._pointsModel.getPoints().slice().sort(sortDate);
-  }
-
   destroy() {
     remove(this._tripInfoComponent);
     remove(this._tripTotalPriceComponent);
+  }
+
+  _getPoints() {
+    return this._pointsModel.getPoints().slice().sort(sortDate);
   }
 }

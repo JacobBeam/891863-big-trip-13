@@ -16,21 +16,11 @@ export default class Menu extends AbstractView {
   constructor() {
     super();
 
-
     this._menuClickHandler = this._menuClickHandler.bind(this);
   }
 
   getTemplate() {
     return createMenuTemplate();
-  }
-
-  _menuClickHandler(evt) {
-
-    if (evt.target.tagName !== ELEMENT_A) {
-      return;
-    }
-    evt.preventDefault();
-    this._callback.menuClick(evt.target.dataset.btn);
   }
 
   setMenuClickHandler(callback) {
@@ -54,6 +44,14 @@ export default class Menu extends AbstractView {
         menuStatistics.classList.add(CLASS_BTN_ACTIVE);
         break;
     }
+  }
 
+  _menuClickHandler(evt) {
+
+    if (evt.target.tagName !== ELEMENT_A) {
+      return;
+    }
+    evt.preventDefault();
+    this._callback.menuClick(evt.target.dataset.btn);
   }
 }

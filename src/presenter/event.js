@@ -41,6 +41,36 @@ export default class Event {
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
+  setViewState(state) {
+
+    const resetFormState = () => {
+      this._eventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isDeleting: true
+        });
+        break;
+      case State.ABORTING:
+        this._eventComponent.shake(resetFormState);
+        this._eventEditComponent.shake(resetFormState);
+        break;
+    }
+  }
+
   init(trip, allDestinations, allOffers) {
     this._trip = trip;
     this._dstinations = allDestinations;
@@ -89,37 +119,6 @@ export default class Event {
       this._replaceFormToCard();
     }
   }
-
-  setViewState(state) {
-
-    const resetFormState = () => {
-      this._eventEditComponent.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false
-      });
-    };
-
-    switch (state) {
-      case State.SAVING:
-        this._eventEditComponent.updateData({
-          isDisabled: true,
-          isSaving: true
-        });
-        break;
-      case State.DELETING:
-        this._eventEditComponent.updateData({
-          isDisabled: true,
-          isDeleting: true
-        });
-        break;
-      case State.ABORTING:
-        this._eventComponent.shake(resetFormState);
-        this._eventEditComponent.shake(resetFormState);
-        break;
-    }
-  }
-
 
   _replaceCardToForm() {
     replace(this._eventEditComponent, this._eventComponent);
