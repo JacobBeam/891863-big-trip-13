@@ -41,6 +41,36 @@ export default class Trip {
 
   }
 
+  init() {
+    this._renderBoard();
+
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+  }
+
+  createPoint(callback) {
+    const destinations = this._getAllDestinations();
+    const offers = this._getAllOffers();
+    this._currentSortType = SortType.DATE_DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._eventNewPresenter.init(callback, destinations, offers);
+  }
+
+  destroy({saveTripInfo = false} = {}) {
+    if (!saveTripInfo) {
+      this._clearBoard({resetSortType: true});
+    } else {
+      this._clearBoard({resetSortType: true, saveTripInfo: true});
+    }
+
+    this._currentSortType = SortType.DATE_DEFAULT;
+
+    remove(this._eventsListComponent);
+
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+
+  }
 
   _getAllDestinations() {
     const destination = this._pointsModel.getAllDestinations();
@@ -65,39 +95,6 @@ export default class Trip {
     }
 
     return filteredPoints.sort(sortDate);
-  }
-
-
-  init() {
-    this._renderBoard();
-
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-  }
-
-
-  createPoint(callback) {
-    const destinations = this._getAllDestinations();
-    const offers = this._getAllOffers();
-    this._currentSortType = SortType.DATE_DEFAULT;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._eventNewPresenter.init(callback, destinations, offers);
-  }
-
-  destroy({saveTripInfo = false} = {}) {
-    if (!saveTripInfo) {
-      this._clearBoard({resetSortType: true});
-    } else {
-      this._clearBoard({resetSortType: true, saveTripInfo: true});
-    }
-
-    this._currentSortType = SortType.DATE_DEFAULT;
-
-    remove(this._eventsListComponent);
-
-    this._pointsModel.removeObserver(this._handleModelEvent);
-    this._filterModel.removeObserver(this._handleModelEvent);
-
   }
 
   _handleSortTypeChange(sortType) {

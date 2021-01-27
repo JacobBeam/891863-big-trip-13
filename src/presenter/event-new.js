@@ -45,45 +45,6 @@ export default class EventNew {
   }
 
 
-  init(callback, allDestinations, allOffers) {
-    this._destroyCallback = callback;
-
-    if (this._eventNewComponent !== null) {
-      return;
-    }
-
-    const isAdded = true;
-
-    //this._eventNewComponent = new EventNewView(allDestinations, allOffers, isAdded);
-    this._eventNewComponent = new EventFormView(BLANK_EVENT,allDestinations, allOffers, isAdded);
-  //this._eventNewComponent.setDeletelClickHandler(this._handleCancelClick);
-    this._eventNewComponent.setCancelClickHandler(this._handleCancelClick);
-    this._eventNewComponent.setFormSubmitHandler(this._handleFormSubmit);
-
-    render(this._eventsListContainer, this._eventNewComponent, RenderPosition.AFTERBEGIN);
-
-
-    document.addEventListener(KEYDOWN_EVENT, this._escKeyDownHandler);
-
-  }
-
-  destroy() {
-    if (this._eventNewComponent === null) {
-      return;
-    }
-
-    if (this._destroyCallback !== null) {
-      this._destroyCallback();
-    }
-
-    remove(this._eventNewComponent);
-    this._eventNewComponent = null;
-
-    document.removeEventListener(KEYDOWN_EVENT, this._escKeyDownHandler);
-  }
-
-
-
   _handleFormSubmit(trip) {
 
     if (!isOnline()) {
@@ -108,5 +69,41 @@ export default class EventNew {
       evt.preventDefault();
       this.destroy();
     }
+  }
+
+  init(callback, allDestinations, allOffers) {
+    this._destroyCallback = callback;
+
+    if (this._eventNewComponent !== null) {
+      return;
+    }
+
+    const isAdded = true;
+
+    //this._eventNewComponent = new EventNewView(allDestinations, allOffers, isAdded);
+    this._eventNewComponent = new EventFormView(BLANK_EVENT,allDestinations, allOffers, isAdded);
+  //this._eventNewComponent.setDeletelClickHandler(this._handleCancelClick);
+    this._eventNewComponent.setCancelClickHandler(this._handleCancelClick);
+    this._eventNewComponent.setFormSubmitHandler(this._handleFormSubmit);
+
+    render(this._eventsListContainer, this._eventNewComponent, RenderPosition.AFTERBEGIN);
+
+    document.addEventListener(KEYDOWN_EVENT, this._escKeyDownHandler);
+
+  }
+
+  destroy() {
+    if (this._eventNewComponent === null) {
+      return;
+    }
+
+    if (this._destroyCallback !== null) {
+      this._destroyCallback();
+    }
+
+    remove(this._eventNewComponent);
+    this._eventNewComponent = null;
+
+    document.removeEventListener(KEYDOWN_EVENT, this._escKeyDownHandler);
   }
 }

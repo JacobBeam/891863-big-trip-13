@@ -64,7 +64,6 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-
 const networkErrorComponent = new NetworkErrorView();
 
 const api = new Api(END_POINT, AUTHORIZATION);

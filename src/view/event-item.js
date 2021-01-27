@@ -89,16 +89,6 @@ export default class EventItem extends AbstractView {
     return createTripItemTemplate(this._trip);
   }
 
-  setEditClickHandler(callback) {
-    this._callback.editClick = callback;
-    this.getElement().querySelector(SELECTOR_EVENT_ROLLUP_BTN).addEventListener(CLICK_EVENT, this._editClickHandler);
-  }
-
-  setFavoriteClickHandler(callback) {
-    this._callback.favoriteClick = callback;
-    this.getElement().querySelector(SELECTOR_EVENT_FAVORITE_BTN).addEventListener(CLICK_EVENT, this._favoriteClickHandler);
-  }
-
   _editClickHandler(evt) {
     evt.preventDefault();
     this._callback.editClick();
@@ -107,6 +97,16 @@ export default class EventItem extends AbstractView {
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(SELECTOR_EVENT_ROLLUP_BTN).addEventListener(CLICK_EVENT, this._editClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(SELECTOR_EVENT_FAVORITE_BTN).addEventListener(CLICK_EVENT, this._favoriteClickHandler);
   }
 
 }

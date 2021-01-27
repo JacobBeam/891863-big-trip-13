@@ -23,10 +23,6 @@ export default class Menu extends AbstractView {
     return createMenuTemplate();
   }
 
-  setMenuClickHandler(callback) {
-    this._callback.menuClick = callback;
-    this.getElement().addEventListener(CLICK_EVENT, this._menuClickHandler);
-  }
 
   setMenuItem(menuItem) {
     const menuTable = this.getElement().querySelector(`[${SELECTOR_DATA_BTN}=${MenuItem.TABLE}]`);
@@ -53,5 +49,10 @@ export default class Menu extends AbstractView {
     }
     evt.preventDefault();
     this._callback.menuClick(evt.target.dataset.btn);
+  }
+
+  setMenuClickHandler(callback) {
+    this._callback.menuClick = callback;
+    this.getElement().addEventListener(CLICK_EVENT, this._menuClickHandler);
   }
 }

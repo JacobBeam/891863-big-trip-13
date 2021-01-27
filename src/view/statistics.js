@@ -270,6 +270,10 @@ export default class Statistics extends SmartView {
     this._setCharts();
   }
 
+  getTemplate() {
+    return createStatisticsTemplate(this._data);
+  }
+
   removeElement() {
     super.removeElement();
 
@@ -280,11 +284,6 @@ export default class Statistics extends SmartView {
     }
   }
 
-  getTemplate() {
-    return createStatisticsTemplate(this._data);
-  }
-
-  // Нужно ли?
   restoreHandlers() {
     this._setCharts();
   }

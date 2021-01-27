@@ -120,19 +120,6 @@ export default class Event {
     }
   }
 
-  _replaceCardToForm() {
-    replace(this._eventEditComponent, this._eventComponent);
-    document.addEventListener(KEYDOWN_EVENT, this._handleEscKeyDown);
-    this._changeMode();
-    this._mode = Mode.EDITING;
-  }
-
-  _replaceFormToCard() {
-    replace(this._eventComponent, this._eventEditComponent);
-    document.removeEventListener(KEYDOWN_EVENT, this._handleEscKeyDown);
-    this._mode = Mode.DEFAULT;
-  }
-
   _handleEscKeyDown(evt) {
     if (evt.key === KEY_ESCAPE || evt.key === KEY_ESC) {
       evt.preventDefault();
@@ -188,6 +175,19 @@ export default class Event {
             }
         )
     );
+  }
+
+  _replaceCardToForm() {
+    replace(this._eventEditComponent, this._eventComponent);
+    document.addEventListener(KEYDOWN_EVENT, this._handleEscKeyDown);
+    this._changeMode();
+    this._mode = Mode.EDITING;
+  }
+
+  _replaceFormToCard() {
+    replace(this._eventComponent, this._eventEditComponent);
+    document.removeEventListener(KEYDOWN_EVENT, this._handleEscKeyDown);
+    this._mode = Mode.DEFAULT;
   }
 
 }

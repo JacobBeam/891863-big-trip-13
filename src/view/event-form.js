@@ -219,6 +219,10 @@ export default class EventForm extends SmartView {
     this._setEndDatepicker();
   }
 
+  getTemplate() {
+    return createEditTripTemplate(this._data, this._destinations, this._isAdded);
+  }
+
    removeElement() {
     super.removeElement();
 
@@ -237,14 +241,6 @@ export default class EventForm extends SmartView {
     }
   }
 
-  getTemplate() {
-    return createEditTripTemplate(this._data, this._destinations, this._isAdded);
-  }
-
-  reset(trip) {
-    this.updateData(EventForm.parseDataToEvent(trip));
-  }
-
   restoreHandlers() {
     this._setInnerHandlers();
     this._setStartDatepicker();
@@ -257,24 +253,8 @@ export default class EventForm extends SmartView {
     this.setDeleteClickHandler(this._callback.deleteClick)}
   }
 
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().querySelector(SELECTOR_FORM).addEventListener(SUBMIT_EVENT, this._formSubmitHandler);
-  }
-
-  setEditCloseClickHandler(callback) {
-    this._callback.editCloseClick = callback;
-    this.getElement().querySelector(SELECTOR_EVENT_ROLLUP_BTN).addEventListener(CLICK_EVENT, this._editCloseClickHandler);
-  }
-
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formDeleteClickHandler);
-  }
-
-  setCancelClickHandler(callback) {
-    this._callback.cancelClick = callback;
-    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formCancelClickHandler);
+  reset(trip) {
+    this.updateData(EventForm.parseDataToEvent(trip));
   }
 
   _setStartDatepicker() {
@@ -333,26 +313,6 @@ export default class EventForm extends SmartView {
     this.updateData({
       endDate: dayjs(userDate).toDate()
     });
-  }
-
-  _setInnerHandlers() {
-    this.getElement()
-      .querySelector(SELECTOR_EVENT_TYPE_LIST)
-      .addEventListener(CHANGE_EVENT, this._eventTypeChangeHandler);
-
-    this.getElement()
-      .querySelector(SELECTOR_EVENT_INPUT_DESTINATION)
-      .addEventListener(CHANGE_EVENT, this._eventDestinationChangeHandler);
-
-    this.getElement()
-      .querySelector(SELECTOR_EVENT_INPUT_PRICE)
-      .addEventListener(INPUT_EVENT, this._eventPriceInputHandler);
-
-    if (this._data.isOffers) {
-      this.getElement()
-        .querySelector(SELECTOR_EVENT_AVAILABLE_OFFERS)
-        .addEventListener(CHANGE_EVENT, this._offersChangeHandler);
-    }
   }
 
   _offersChangeHandler(evt) {
@@ -426,10 +386,49 @@ export default class EventForm extends SmartView {
   }
 
 
-
   _formCancelClickHandler(evt) {
     evt.preventDefault();
     this._callback.cancelClick();
+  }
+
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector(SELECTOR_EVENT_TYPE_LIST)
+      .addEventListener(CHANGE_EVENT, this._eventTypeChangeHandler);
+
+    this.getElement()
+      .querySelector(SELECTOR_EVENT_INPUT_DESTINATION)
+      .addEventListener(CHANGE_EVENT, this._eventDestinationChangeHandler);
+
+    this.getElement()
+      .querySelector(SELECTOR_EVENT_INPUT_PRICE)
+      .addEventListener(INPUT_EVENT, this._eventPriceInputHandler);
+
+    if (this._data.isOffers) {
+      this.getElement()
+        .querySelector(SELECTOR_EVENT_AVAILABLE_OFFERS)
+        .addEventListener(CHANGE_EVENT, this._offersChangeHandler);
+    }
+  }
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(SELECTOR_FORM).addEventListener(SUBMIT_EVENT, this._formSubmitHandler);
+  }
+
+  setEditCloseClickHandler(callback) {
+    this._callback.editCloseClick = callback;
+    this.getElement().querySelector(SELECTOR_EVENT_ROLLUP_BTN).addEventListener(CLICK_EVENT, this._editCloseClickHandler);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formDeleteClickHandler);
+  }
+
+  setCancelClickHandler(callback) {
+    this._callback.cancelClick = callback;
+    this.getElement().querySelector(SELECTOR_EVENT_RESET_BTN).addEventListener(CLICK_EVENT, this._formCancelClickHandler);
   }
 
   static parseEventToData(trip, allOffers) {

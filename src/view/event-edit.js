@@ -191,7 +191,7 @@ export default class EventEdit extends SmartView {
     this._setEndDatepicker();
   }
 
-getTemplate() {
+  getTemplate() {
     return createEditTripTemplate(this._data, this._destinations);
   }
 
@@ -227,6 +227,21 @@ getTemplate() {
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setEditCloseClickHandler(this._callback.editCloseClick);
     this.setDeleteClickHandler(this._callback.deleteClick)
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  setEditCloseClickHandler(callback) {
+    this._callback.editCloseClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editCloseClickHandler);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
   }
 
   _setStartDatepicker() {
@@ -322,7 +337,6 @@ getTemplate() {
     }, true);
   }
 
-
   _eventPriceInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
@@ -343,8 +357,6 @@ getTemplate() {
   }
 
   _eventDestinationChangeHandler(evt) {
-
-
     const [newDestination] = this._destinations.filter((destination) => destination.name === evt.target.value);
     const destinationList = this._destinations.map((city) => city.name);
 
@@ -366,31 +378,15 @@ getTemplate() {
     this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
   }
 
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
-  }
-
   _editCloseClickHandler(evt) {
     evt.preventDefault();
     this._callback.editCloseClick();
   }
 
-  setEditCloseClickHandler(callback) {
-    this._callback.editCloseClick = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editCloseClickHandler);
-  }
-
-  _formDeleteClickHandler(evt) {
+   _formDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteClick(EventEdit.parseDataToEvent(this._data));
   }
-
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
-  }
-
 
   static parseEventToData(trip, allOffers) {
 

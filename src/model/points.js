@@ -135,7 +135,6 @@ export default class Points extends Observer {
     delete adaptedPoint.eventPrice;
     delete adaptedPoint.isFavorite;
 
-
     return adaptedPoint;
   }
 }
