@@ -2,8 +2,8 @@ import PointsModel from "../model/points.js";
 
 const URL_POINTS = `points`;
 const URL_DESTINATIONS = `destinations`;
-const URL_OFFERS =`offers`
-const URL_SYNC = `sync`
+const URL_OFFERS = `offers`;
+const URL_SYNC = `sync`;
 const HEADER_CONTENT_TYPE = `application/json`;
 const HEADER_AUTHORIZATION = `Authorization`;
 

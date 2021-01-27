@@ -7,8 +7,8 @@ import {toast} from "../utils/toast/toast.js";
 
 const KEYDOWN_EVENT = `keydown`;
 const TOAST_ERROR_SAVE = `You can't save point offline`;
-const TOAST_ERROR_DELETE = `You can't delete point offline`
-const TOAST_ERROR_EDIT = `You can't edit point offline`
+const TOAST_ERROR_DELETE = `You can't delete point offline`;
+const TOAST_ERROR_EDIT = `You can't edit point offline`;
 const KEY_ESCAPE = `Escape`;
 const KEY_ESC = `Esc`;
 

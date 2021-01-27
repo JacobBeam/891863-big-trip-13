@@ -3,7 +3,7 @@ import {isOnline} from "../utils/utils.js";
 
 const ADD_ERROR = `Add point failed`;
 const DELETE_ERROR = `Delete point failed`;
-const SYNC_ERROR =`Sync data failed`;
+const SYNC_ERROR = `Sync data failed`;
 
 const StoreNameStructure = {
   POINTS: `POINTS`,
@@ -129,7 +129,7 @@ export default class Provider {
         });
     }
 
-    return Promise.reject(new Error(ADD_ERROR ));
+    return Promise.reject(new Error(ADD_ERROR));
   }
 
   deletePoint(point) {

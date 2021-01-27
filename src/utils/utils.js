@@ -43,7 +43,7 @@ export const MenuItem = {
 
 const formatDuration = (duration) =>{
   return (duration >= TWO_DIGIT_FORMAT_MIN_VALUE && duration < TWO_DIGIT_FORMAT_MAX_VALUE) ? TWO_DIGIT_FORMAT + duration : duration;
-}
+};
 
 export const isOnline = () => {
   return window.navigator.onLine;
@@ -51,20 +51,22 @@ export const isOnline = () => {
 
 export const findEventDuration = (start, end) => {
 
-  let durationInDay = dayjs(end).diff(dayjs(start), DURATION_DAY)
-  end = dayjs(end).subtract(durationInDay, DURATION_DAY)
+  let durationInDay = dayjs(end).diff(dayjs(start), DURATION_DAY);
+  end = dayjs(end).subtract(durationInDay, DURATION_DAY);
   let durationInHours = dayjs(end).diff(dayjs(start), DURATION_HOUR);
-  end = dayjs(end).subtract(durationInHours, DURATION_HOUR)
+  end = dayjs(end).subtract(durationInHours, DURATION_HOUR);
   let durationInMinutes = dayjs(end).diff(dayjs(start), DURATION_MINUTE);
- durationInMinutes = formatDuration(durationInMinutes) + MINUTE_FORMAT;
+  durationInMinutes = formatDuration(durationInMinutes) + MINUTE_FORMAT;
 
- if ((durationInDay > 0) || ( durationInHours > 0)) {
-    durationInHours =formatDuration(durationInHours) + HOUR_FORMAT;
-  } else { durationInHours = `` };
+  if ((durationInDay > 0) || (durationInHours > 0)) {
+    durationInHours = formatDuration(durationInHours) + HOUR_FORMAT;
+  } else {
+    durationInHours = ``;
+  }
 
- durationInDay = (durationInDay > 0) ? formatDuration(durationInDay) + DAY_FORMAT : ``;
+  durationInDay = (durationInDay > 0) ? formatDuration(durationInDay) + DAY_FORMAT : ``;
 
-  return `${durationInDay} ${durationInHours} ${durationInMinutes}`
+  return `${durationInDay} ${durationInHours} ${durationInMinutes}`;
 };
 
 export const sortDate = (a, b) => {

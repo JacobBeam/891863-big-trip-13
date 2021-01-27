@@ -3,7 +3,7 @@ import AbstractView from "./abstract.js";
 
 const EVENT_DATE_FORMAT = `MMM DD`;
 const DASH = ` &mdash; `;
-const ELLOPSIS = `...`
+const ELLOPSIS = `...`;
 
 const createTripInfoTemplate = (trips) => {
 

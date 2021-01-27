@@ -18,7 +18,7 @@ const VALUE_TRUE = `true`;
 const SELECTOR_START_TIME = `#event-start-time-1`;
 const SELECTOR_END_TIME = `#event-end-time-1`;
 const SELECTOR_EVENT_TYPE_LIST = `.event__type-list`;
-const SELECTOR_EVENT_INPUT_DESTINATION= `.event__input--destination`;
+const SELECTOR_EVENT_INPUT_DESTINATION = `.event__input--destination`;
 const SELECTOR_EVENT_INPUT_PRICE = `.event__input--price`;
 const SELECTOR_EVENT_AVAILABLE_OFFERS = `.event__available-offers`;
 const SELECTOR_EVENT_SAVE_BTN = `.event__save-btn`;
@@ -58,7 +58,7 @@ const createEditTripTemplate = (data, allDestinations, isAdded) => {
 
 ${offersByType.map(({title, price}, index) => {
     const findSomeOffer = (offer)=> offer.title === title && offer.price === price;
-    const isChecked = offersData.some(findSomeOffer)
+    const isChecked = offersData.some(findSomeOffer);
 
     return `<div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${index}" type="checkbox" value="${index}" name="event-offer-${index}" ${isChecked ? `checked` : ``}>
@@ -211,7 +211,7 @@ export default class EventForm extends SmartView {
     return createEditTripTemplate(this._data, this._destinations, this._isAdded);
   }
 
-   removeElement() {
+  removeElement() {
     super.removeElement();
 
     if (this._datepickerStart) {
@@ -233,8 +233,10 @@ export default class EventForm extends SmartView {
 
     if (this._isAdded) {
       this.setCancelClickHandler(this._callback.cancelClick);
-    } else {this.setEditCloseClickHandler(this._callback.editCloseClick);
-    this.setDeleteClickHandler(this._callback.deleteClick)}
+    } else {
+      this.setEditCloseClickHandler(this._callback.editCloseClick);
+      this.setDeleteClickHandler(this._callback.deleteClick);
+    }
   }
 
   reset(trip) {
@@ -310,7 +312,6 @@ export default class EventForm extends SmartView {
     }, true);
   }
 
-
   _eventPriceInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
@@ -352,25 +353,20 @@ export default class EventForm extends SmartView {
     this._callback.formSubmit(EventForm.parseDataToEvent(this._data));
   }
 
-
   _editCloseClickHandler(evt) {
     evt.preventDefault();
     this._callback.editCloseClick();
   }
-
-
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteClick(EventForm.parseDataToEvent(this._data));
   }
 
-
   _formCancelClickHandler(evt) {
     evt.preventDefault();
     this._callback.cancelClick();
   }
-
 
   _setInnerHandlers() {
     this.getElement()

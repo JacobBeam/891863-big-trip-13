@@ -5,7 +5,7 @@ const SHAKE_ANIMATION_TIME = `s`;
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const SHAKE_ANIMATION_DURATION = 0.6;
 const ERROR_INSTANTIATE_ABSTRACT = `Can't instantiate Abstract, only concrete one.`;
-const ERROR_IMPLEMENT = `Abstract method not implemented: getTemplate`
+const ERROR_IMPLEMENT = `Abstract method not implemented: getTemplate`;
 export default class Abstract {
   constructor() {
     if (new.target === Abstract) {
