@@ -1,4 +1,3 @@
-import EventNewView from "../view/event-new.js";
 import EventFormView from "../view/event-form.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../utils/utils.js";
@@ -80,9 +79,7 @@ export default class EventNew {
 
     const isAdded = true;
 
-    //this._eventNewComponent = new EventNewView(allDestinations, allOffers, isAdded);
     this._eventNewComponent = new EventFormView(BLANK_EVENT,allDestinations, allOffers, isAdded);
-  //this._eventNewComponent.setDeletelClickHandler(this._handleCancelClick);
     this._eventNewComponent.setCancelClickHandler(this._handleCancelClick);
     this._eventNewComponent.setFormSubmitHandler(this._handleFormSubmit);
 

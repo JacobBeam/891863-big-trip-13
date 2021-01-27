@@ -25,16 +25,6 @@ const SELECTOR_EVENT_SAVE_BTN = `.event__save-btn`;
 const SELECTOR_FORM = `form`;
 const SELECTOR_EVENT_ROLLUP_BTN = `.event__rollup-btn`;
 const SELECTOR_EVENT_RESET_BTN = `.event__reset-btn`;
-//const BLANK_EVENT = {
-//  eventType: TYPES[0].toLowerCase(),
-//  destination: ``,
-//  offers: [],
-//  startDate: (new Date()),
-//  endDate: (new Date()),
-//  destinationInfo: ``,
-//  destinationPhoto: [],
-//  eventPrice: ``,
-//  isFavorite: false};
 
 const createEditTripTemplate = (data, allDestinations, isAdded) => {
 
@@ -85,7 +75,6 @@ ${offersByType.map(({title, price}, index) => {
 
   const offersTemplate = createOffersTemplate(offers, offersList, isOffers);
 
-
   const createDestinationInfoTemplate = (info, isInfo) => {
     return isInfo ? `<p class="event__destination-description">${info}</p>` : ` `;
   };
@@ -115,7 +104,6 @@ ${photo.map((value) => `<img class="event__photo" src= "${value.src}" alt="${val
   </section> `;
     }
     return ``;
-
   };
 
   const destinationTemplate = createDestinationTemplate(destinationInfoTemplate, isDestinationInfo, destinationPhotoTemplate, isDestinationPhoto);
@@ -227,15 +215,11 @@ export default class EventForm extends SmartView {
     super.removeElement();
 
     if (this._datepickerStart) {
-      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
-      // которые создает flatpickr при инициализации
       this._datepickerStart.destroy();
       this._datepickerStart = null;
     }
 
     if (this._datepickerEnd) {
-      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
-      // которые создает flatpickr при инициализации
       this._datepickerEnd.destroy();
       this._datepickerEnd = null;
     }
@@ -259,8 +243,6 @@ export default class EventForm extends SmartView {
 
   _setStartDatepicker() {
     if (this._datepickerStart) {
-      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
-      // которые создает flatpickr при инициализации
       this._datepickerStart.destroy();
       this._datepickerStart = null;
     }
@@ -291,8 +273,6 @@ export default class EventForm extends SmartView {
 
   _setEndDatepicker() {
     if (this._datepickerEnd) {
-      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
-      // которые создает flatpickr при инициализации
       this._datepickerEnd.destroy();
       this._datepickerEnd = null;
     }

@@ -20,7 +20,6 @@ export default class Points extends Observer {
 
   setAllDestinations(destinations) {
     this._destinations = destinations.slice();
-
   }
 
   getAllDestinations() {
@@ -126,7 +125,6 @@ export default class Points extends Observer {
         }
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedPoint.eventType;
     delete adaptedPoint.destinationInfo;
     delete adaptedPoint.destinationPhoto;

@@ -1,4 +1,3 @@
-//import EventEditView from "../view/event-edit.js";
 import EventFormView from "../view/event-form.js";
 import EventItemView from "../view/event-item.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
@@ -82,7 +81,6 @@ export default class Event {
     const isAdded = false;
 
     this._eventComponent = new EventItemView(this._trip);
-    //this._eventEditComponent = new EventEditView(this._trip, this._dstinations, this._offers, isAdded);
     this._eventEditComponent = new EventFormView(this._trip, this._dstinations, this._offers, isAdded);
 
     this._eventComponent.setEditClickHandler(this._handleEditClick);

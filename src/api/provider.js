@@ -140,7 +140,6 @@ export default class Provider {
     }
 
     return Promise.reject(new Error(DELETE_ERROR));
-
   }
 
   sync() {
@@ -149,12 +148,9 @@ export default class Provider {
 
       return this._api.sync(storePoints)
         .then((response) => {
-          // Забираем из ответа синхронизированные задачи
           const createdPoints = getSyncedPoints(response.created);
           const updatedPoints = getSyncedPoints(response.updated);
 
-          // Добавляем синхронизированные задачи в хранилище.
-          // Хранилище должно быть актуальным в любой момент.
           const items = createStoreStructure([...createdPoints, ...updatedPoints], StoreNameStructure.POINTS);
           this._store.setItems(StoreNameStructure.POINTS, items);
 
@@ -164,6 +160,4 @@ export default class Provider {
 
     return Promise.reject(new Error(SYNC_ERROR));
   }
-
-
 }

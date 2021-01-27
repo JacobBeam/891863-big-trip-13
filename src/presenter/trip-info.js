@@ -8,7 +8,6 @@ export default class TripInfo {
   constructor(renderContainer, pointsModel) {
     this._renderContainer = renderContainer;
     this._pointsModel = pointsModel;
-
   }
 
   init() {
