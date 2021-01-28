@@ -6,8 +6,7 @@ const DURATION_MINUTE = `minute`;
 const DAY_FORMAT = `D`;
 const HOUR_FORMAT = `H`;
 const MINUTE_FORMAT = `M`;
-const TWO_DIGIT_FORMAT_MIN_VALUE = 0;
-const TWO_DIGIT_FORMAT_MAX_VALUE = 10;
+const NUMBER_OF_DIGITS = 2;
 const TWO_DIGIT_FORMAT = `0`;
 
 
@@ -42,7 +41,7 @@ export const MenuItem = {
 };
 
 const formatDuration = (duration) =>{
-  return (duration >= TWO_DIGIT_FORMAT_MIN_VALUE && duration < TWO_DIGIT_FORMAT_MAX_VALUE) ? TWO_DIGIT_FORMAT + duration : duration;
+  return String(duration).padStart(NUMBER_OF_DIGITS, TWO_DIGIT_FORMAT);
 };
 
 export const isOnline = () => {
