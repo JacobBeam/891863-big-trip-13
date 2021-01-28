@@ -180,12 +180,14 @@ export default class Event {
     document.addEventListener(KEYDOWN_EVENT, this._handleEscKeyDown);
     this._changeMode();
     this._mode = Mode.EDITING;
+    this._eventEditComponent.setDatepickers();
   }
 
   _replaceFormToCard() {
     replace(this._eventComponent, this._eventEditComponent);
     document.removeEventListener(KEYDOWN_EVENT, this._handleEscKeyDown);
     this._mode = Mode.DEFAULT;
+    this._eventEditComponent.removeDatepickers();
   }
 
 }

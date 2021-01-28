@@ -82,11 +82,10 @@ export default class EventNew {
     this._eventNewComponent = new EventFormView(BLANK_EVENT, allDestinations, allOffers, isAdded);
     this._eventNewComponent.setCancelClickHandler(this._handleCancelClick);
     this._eventNewComponent.setFormSubmitHandler(this._handleFormSubmit);
-
+    this._eventNewComponent.setDatepickers();
     render(this._eventsListContainer, this._eventNewComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(KEYDOWN_EVENT, this._escKeyDownHandler);
-
   }
 
   destroy() {

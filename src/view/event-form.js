@@ -203,8 +203,6 @@ export default class EventForm extends SmartView {
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
     this._setInnerHandlers();
-    this._setStartDatepicker();
-    this._setEndDatepicker();
   }
 
   getTemplate() {
@@ -213,22 +211,12 @@ export default class EventForm extends SmartView {
 
   removeElement() {
     super.removeElement();
-
-    if (this._datepickerStart) {
-      this._datepickerStart.destroy();
-      this._datepickerStart = null;
-    }
-
-    if (this._datepickerEnd) {
-      this._datepickerEnd.destroy();
-      this._datepickerEnd = null;
-    }
+    this.removeDatepickers();
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this._setStartDatepicker();
-    this._setEndDatepicker();
+    this.setDatepickers();
     this.setFormSubmitHandler(this._callback.formSubmit);
 
     if (this._isAdded) {
@@ -241,6 +229,23 @@ export default class EventForm extends SmartView {
 
   reset(trip) {
     this.updateData(EventForm.parseDataToEvent(trip));
+  }
+
+  removeDatepickers() {
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+
+    if (this._datepickerEnd) {
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
+    }
+  }
+
+  setDatepickers() {
+    this._setStartDatepicker();
+    this._setEndDatepicker();
   }
 
   _setStartDatepicker() {
@@ -387,6 +392,7 @@ export default class EventForm extends SmartView {
         .addEventListener(CHANGE_EVENT, this._offersChangeHandler);
     }
   }
+
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector(SELECTOR_FORM).addEventListener(SUBMIT_EVENT, this._formSubmitHandler);
